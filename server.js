@@ -1,6 +1,8 @@
 'use strict';
 
-var express = require("express");
+var express = require("express"),
+	web3 = require("web3"),
+	web3Admin = require("web3admin");
 
 var app = express();
 var port = 8080;
