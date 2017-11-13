@@ -57,4 +57,50 @@ $(document).ready(function(){
 			}
 		});
 	});
+
+	$("#startNode").on('submit', function(e){
+		e.preventDefault();
+		$("#ethereumNodeStatus").val("Starting Ethereum...");
+		var timeout = setTimeout(function(){
+					$("#ethereumNodeStatus").val("Ethereum started successfully. Move to Step 2 now.");
+					$("#nextStep").prop("disabled", false);
+					$("#nextStep").removeClass("btn-dark");
+					$("#nextStep").addClass("btn-primary");
+				},5000);	
+		$.ajax({
+		    url: '/api/configureEthereum:start', 
+		    type: 'POST', 
+		    contentType: 'application/json'}
+		).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+				$("#ethereumNodeStatus").val(resp.errorDetails);
+				clearInterval(timeout)
+			}else if(resp.status == "complete"){
+				setTimeout(function(){
+					$("#ethereumNodeStatus").val(resp.message);
+				},4000);				
+			}
+		});
+	});
+
+	$("#stopNode").on('click', function(e){
+		e.preventDefault();
+		$.ajax({
+		    url: '/api/configureEthereum:stop', 
+		    type: 'POST', 
+		    contentType: 'application/json'}
+		).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				alert(resp.message);
+			}
+		});
+	});
+
+
+	$("#nextStep").on('click', function(e){
+		window.location.href = 'http://www.google.com';
+	});
 });
