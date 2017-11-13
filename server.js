@@ -1,14 +1,20 @@
 'use strict';
 
 var express = require("express"),
-	web3 = require("web3"),
-	web3Admin = require("web3admin");
+	routes = require("./routes"),
+	bodyParser = require('body-parser');
 
 var app = express();
 var port = 8080;
 
 app.disable('etag');
 app.use('/', express.static(__dirname + '/public/'));
+app.use(bodyParser.urlencoded({'extended':'true'}));
+app.use(bodyParser.json());
+app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
+
 app.listen(port);
+
+app.post('/api/configureEthereum:type', routes.configureEthereum);
 
 console.log("Script started. Head over to http://localhost:"+port+ " on your browser");
