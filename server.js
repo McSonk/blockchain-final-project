@@ -16,5 +16,6 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 app.listen(port);
 
 app.post('/api/configureEthereum:type', routes.configureEthereum);
+app.post('/api/startWeb3', routes.startWeb3);
 
 console.log("Script started. Head over to http://localhost:"+port+ " on your browser");

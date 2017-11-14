@@ -101,6 +101,6 @@ $(document).ready(function(){
 
 
 	$("#nextStep").on('click', function(e){
-		window.location.href = 'http://www.google.com';
+		window.location.href = './ethereum.html';
 	});
 });

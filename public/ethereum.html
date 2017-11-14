@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="Aneesh Bhatnagar">
+	<title>Performing Ethereum Operations</title>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+				<h1 class="title">Performing Ethereum Operations</h1>
+			</div>
+		</div>
+		<div class="row" style="margin-top:-20px;">
+			<div class="col-4 text-right">
+				<label for="enodeAddress" style="margin-top:8px;">Enode</label>
+				<br/>
+				<label for="coinbaseAddress" style="margin-top:15px;">Coinbase Address</label>
+				<br/>
+			</div>
+			<div class="col-8 text-left">
+				<input type="text" style="width: 80%; margin-bottom: 10px;" class="form-control" id="enodeAddress" placeholder="Your Enode address" readonly>
+				<input type="text" style="width: 80%;" class="form-control" id="coinbaseAddress" placeholder="Your Coinbase address" readonly>
+			</div>
+		</div>
+		<div class="row justify-content-center" style="margin-top: 25px;">
+			<div id="accordion" role="tablist" aria-multiselectable="true">
+				<div class="card">
+					<div class="card-header" role="tab" id="headingOne">
+						<h5 class="mb-0"><a data-toggle="collapse" data-parent="#accordion" href="#connectPeer" aria-expanded="true" aria-controls="connectPeer">Connect to a Peer</a></h5>
+					</div>
+					<div id="connectPeer" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
+						<div class="card-block">
+							<p>If you want to add a new peer, enter their entire enode below, along with the IP Address and the port number.</p>
+							<form id="connectToPeer" class="data-entry-form">
+								<div class="form-group row">
+									<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+										<input type="text" class="form-control" id="destEnode" placeholder="Enter destination Enode here">	
+									</div>
+									<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+										<button type="submit" class="btn btn-primary">Add Peer</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header" role="tab" id="headingTwo">
+						<h5 class="mb-0"><a data-toggle="collapse" data-parent="#accordion" href="#checkPeerCount" aria-expanded="true" aria-controls="checkPeerCount">Check Peer Count</a></h5>
+					</div>
+					<div id="checkPeerCount" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+						<div class="card-block">
+							<p>If you want to check the count of connected peers, press the button below to query and return the result.</p>
+							<form id="checkPeer" class="data-entry-form">
+								<div class="form-group row">
+									<div class="col-12 text-center">
+										<button type="submit" class="btn btn-primary">Check Peer Count</button>
+									</div>
+								</div>
+								<label for="peerCount">Connected Peer Count</label>
+								<input type="text" class="form-control" id="peerCount" placeholder="Connected Peer Count" readonly>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header" role="tab" id="headingThree">
+						<h5 class="mb-0"><a data-toggle="collapse" data-parent="#accordion" href="#checkPeers" aria-expanded="true" aria-controls="checkPeers">Check Peers</a></h5>
+					</div>
+					<div id="checkPeers" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+						<div class="card-block">
+							<p>If you want to check the connected peers, press the button below to query and return the result.</p>
+							<form id="checkPeersForm" class="data-entry-form">
+								<div class="form-group row">
+									<div class="col-12 text-center">
+										<button type="submit" class="btn btn-primary">Check Peers</button>
+									</div>
+								</div>
+								<label for="peerDetails">Connected Peers</label>
+								<textarea rows="7" class="form-control" id="peerDetails" placeholder="Connected Peers Details" readonly></textarea>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header" role="tab" id="headingFour">
+						<h5 class="mb-0"><a data-toggle="collapse" data-parent="#accordion" href="#unlockAccount" aria-expanded="true" aria-controls="unlockAccount">Unlock Account</a></h5>
+					</div>
+					<div id="unlockAccount" class="collapse" role="tabpanel" aria-labelledby="headingFour">
+						<div class="card-block">
+							<p>If you want to unlock your account, please enter the password you used to create the account and submit the form.</p>
+							<form id="unlockAccountForm" class="data-entry-form">
+								<div class="form-group row">
+									<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+										<input type="text" class="form-control" id="password" placeholder="Enter your Password here">	
+									</div>
+									<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+										<button type="submit" class="btn btn-primary">Unlock Account</button>
+									</div>
+								</div>
+								<label for="unlockStatus">Unlock Status</label>
+								<input type="text" class="form-control" id="unlockStatus" placeholder="Account Unlock Status" readonly>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header" role="tab" id="headingSix">
+						<h5 class="mb-0"><a data-toggle="collapse" data-parent="#accordion" href="#checkBalance" aria-expanded="true" aria-controls="checkBalance">Check Balance</a></h5>
+					</div>
+					<div id="checkBalance" class="collapse" role="tabpanel" aria-labelledby="headingSix">
+						<div class="card-block">
+							<p>If you want to check your balance, press the button below to query and return the result.</p>
+							<form id="checkBalanceForm" class="data-entry-form">
+								<div class="form-group row">
+									<div class="col-12 text-center">
+										<button type="submit" class="btn btn-primary">Check Balance</button>
+									</div>
+								</div>
+								<label for="balanceWei">Balance (in Weis)</label>
+								<input type="text" class="form-control" id="balanceWei" placeholder="Balance (in Weis)" readonly>
+								<label for="balanceEther">Balance (in Ethers)</label>
+								<input type="text" class="form-control" id="balanceEther" placeholder="Balance (in Weis)" readonly>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header" role="tab" id="headingFive">
+						<h5 class="mb-0"><a data-toggle="collapse" data-parent="#accordion" href="#sendTransaction" aria-expanded="true" aria-controls="sendTransaction">Send Transaction</a></h5>
+					</div>
+					<div id="sendTransaction" class="collapse" role="tabpanel" aria-labelledby="headingFive">
+						<div class="card-block">
+							<p>If you want to initiate a transaction, enter the receiver's account address (coinbase) and the amount you want to send in ethers. Please make sure you unlock your account and you have sufficient funds.</p>
+							<form id="sendTransactionForm" class="data-entry-form">
+								<div class="form-group row">
+									<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+										<input type="text" class="form-control" id="destinationAddress" placeholder="Enter receiver's account address here">	
+									</div>
+									<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+										<input type="text" class="form-control" id="sendAmount" placeholder="Enter the amount (in Ethers)">	
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-12 text-center">
+										<button type="submit" class="btn btn-primary">Send Transaction</button>
+									</div>
+								</div>
+								<label for="unlockStatus">Transaction Status</label>
+								<input type="text" class="form-control" id="transactionStatus" placeholder="Account Unlock Status" readonly>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header" role="tab" id="headingSeven">
+						<h5 class="mb-0"><a data-toggle="collapse" data-parent="#accordion" href="#checkTransaction" aria-expanded="true" aria-controls="checkTransaction">Check Transaction Status</a></h5>
+					</div>
+					<div id="checkTransaction" class="collapse" role="tabpanel" aria-labelledby="headingSeven">
+						<div class="card-block">
+							<p>If you want to check your balance, press the button below to query and return the result.</p>
+							<form id="checkTransactionForm" class="data-entry-form">
+								<div class="form-group row">
+									<div class="col-12 text-center">
+										<button type="submit" class="btn btn-primary">Check Transaction Status</button>
+									</div>
+								</div>
+								<label for="pendingTransactions">Pending Transactions</label>
+								<input type="text" class="form-control" id="pendingTransactions" placeholder="Pending Transactions" readonly>
+								<label for="queuedTransactions">Queued Transactions</label>
+								<input type="text" class="form-control" id="queuedTransactions" placeholder="Queued Transactions" readonly>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/popper.min.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/script.js"></script>
+	<script>
+		$(window).on('load', function(){
+			$.ajax({
+				url: '/api/startWeb3', 
+				type: 'POST', 
+				contentType: 'application/json'}
+			).done(function(resp){
+				if(resp.status == "error"){
+					alert(resp.errorDetails);
+				}else if(resp.status == "complete"){
+					$("#enodeAddress").val(resp.enode);
+					$("#coinbaseAddress").val(resp.coinbase);
+				}
+			});
+		});
+	</script>
+</body>
+</html>

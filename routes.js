@@ -1,6 +1,10 @@
 'use strict';
 var fs = require('fs');
 const { exec } = require('child_process');
+const Web3 = require('web3');
+var web3 = new Web3();
+const web3Admin = require('web3admin');
+var connected = false;
 
 module.exports = {
 	configureEthereum: function(req, resp){
@@ -51,7 +55,7 @@ module.exports = {
 				return;
 			});
 		}else if(type == ":start"){
-			exec('geth --datadir /home/aneesh/testNodeChain --maxpeers 95 --networkid 13 --nodiscover --rpc --rpccorsdomain "http://localhost:8080" --port 30302 --rpcport 8545 --rpcapi="db,eth,net,web3,personal,admin"', (err, stdout, stderr) =>{
+			exec('geth --datadir /home/aneesh/testNodeChain --maxpeers 95 --networkid 13 --nodiscover --rpc --rpccorsdomain "*" --port 30302 --rpcport 8545 --rpcapi="db,eth,net,web3,personal,admin"', (err, stdout, stderr) =>{
 				console.log("ERR" + err);
 				console.log("stdout" + stdout);
 				console.log("stderr" + stderr);
@@ -70,5 +74,29 @@ module.exports = {
 			});
 		}
 
+	},
+	startWeb3: function(req, resp){
+		if(connected == false){
+			web3.setProvider(new Web3.providers.HttpProvider('http://localhost:8545'));
+			//console.log(web3);
+			setTimeout(function(){
+				try{
+					web3Admin.extend(web3);
+				}catch(e){
+					resp.json({"status":"error", "errorDetails":"Unable to connect with Ethereum node"});	
+					return;
+				}
+								resp.json({"status":"complete", "message":"Connected with Ethereum node", "enode":web3.admin.nodeInfo.enode, "coinbase":web3.eth.coinbase});
+			}, 1000);
+			connected = true;
+		}
+		else{
+			if(web3.isConnected()){
+				resp.json({"status":"complete", "message":"Connected with Ethereum node", "enode":web3.admin.nodeInfo.enode, "coinbase":web3.eth.coinbase});
+			}else{
+				connected = false;
+				resp.json({"status":"error", "errorDetails":"Unable to connect with Ethereum node. Please refresh this page and try again."});	
+			}
+		}	
 	}
 }
