@@ -1,4 +1,6 @@
 $(document).ready(function(){
+
+	//Getting Started with Ethereum Functions
 	$("#createNewAccount").on('submit', function(e){
 		e.preventDefault()
 		var password = $("#password").val()
@@ -99,8 +101,137 @@ $(document).ready(function(){
 		});
 	});
 
-
 	$("#nextStep").on('click', function(e){
 		window.location.href = './ethereum.html';
 	});
+
+
+	//Performing Ethereum Functions
+	$("#connectToPeer").on('submit', function(e){
+		e.preventDefault();		
+		var enode = $("#destEnode").val();
+		
+		if(!enode){
+			alert("Please enter the enode!");
+			return;
+		}
+		$.ajax({
+		    url: '/api/ethereum:addPeer', 
+		    type: 'POST', 
+		    contentType: 'application/json',
+		    data: JSON.stringify({"enode":enode})}
+		).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#peerStatus").val(resp.addStatus);
+			}
+		});
+	});
+
+	$("#checkPeer").on('submit', function(e){
+		e.preventDefault();		
+		$.ajax({
+		    url: '/api/ethereum:peerCount', 
+		    type: 'POST', 
+		    contentType: 'application/json'}
+		).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#peerCount").val(resp.count);
+			}
+		});
+	});
+
+	$("#checkPeersForm").on('submit', function(e){
+		e.preventDefault();		
+		$.ajax({
+		    url: '/api/ethereum:peers', 
+		    type: 'POST', 
+		    contentType: 'application/json'}
+		).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#peerDetails").val(resp.peers);
+			}
+		});
+	});
+
+	$("#unlockAccountForm").on('submit', function(e){
+		e.preventDefault();		
+		var password = $("#password").val();
+		if(!password){
+			alert("Please enter your password!");
+			return;
+		}
+		$.ajax({
+		    url: '/api/ethereum:unlockAccount', 
+		    type: 'POST', 
+		    contentType: 'application/json',
+		    data: JSON.stringify({"password":password})}
+		).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#unlockStatus").val(resp.unlock);
+			}
+		});
+	});
+
+	$("#checkBalanceForm").on('submit', function(e){
+		e.preventDefault();		
+		$.ajax({
+		    url: '/api/ethereum:balance', 
+		    type: 'POST', 
+		    contentType: 'application/json'}
+		).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#balanceWei").val(resp.wei);
+				$("#balanceEther").val(resp.ether);
+			}
+		});
+	});
+
+	$("#sendTransactionForm").on('submit', function(e){
+		e.preventDefault();		
+		var receiver = $("#destinationAddress").val();
+		var amount = $("#sendAmount").val();
+		if(!receiver || !amount){
+			alert("Please enter both the receiver and the amount!");
+			return;
+		}
+		$.ajax({
+		    url: '/api/ethereum:transaction', 
+		    type: 'POST', 
+		    contentType: 'application/json',
+		    data: JSON.stringify({"receiver":receiver, "amount":amount})}
+		).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#transactionStatus").val(resp.transactionStatus);
+			}
+		});
+	});
+
+	$("#checkTransactionForm").on('submit', function(e){
+		e.preventDefault();		
+		$.ajax({
+		    url: '/api/ethereum:transactionStatus', 
+		    type: 'POST', 
+		    contentType: 'application/json'}
+		).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#pendingTransactions").val(resp.pending);
+				$("#queuedTransactions").val(resp.queued);
+			}
+		});
+	});
+
 });

@@ -55,7 +55,7 @@ module.exports = {
 				return;
 			});
 		}else if(type == ":start"){
-			exec('geth --datadir /home/aneesh/testNodeChain --maxpeers 95 --networkid 13 --nodiscover --rpc --rpccorsdomain "*" --port 30302 --rpcport 8545 --rpcapi="db,eth,net,web3,personal,admin"', (err, stdout, stderr) =>{
+			exec('geth --datadir /home/aneesh/testNodeChain --maxpeers 95 --networkid 13 --nodiscover --rpc --rpccorsdomain "*" --port 30302 --rpcport 8545 --rpcapi=txpool,db,eth,net,web3,personal,admin"', (err, stdout, stderr) =>{
 				console.log("ERR" + err);
 				console.log("stdout" + stdout);
 				console.log("stderr" + stderr);
@@ -78,7 +78,6 @@ module.exports = {
 	startWeb3: function(req, resp){
 		if(connected == false){
 			web3.setProvider(new Web3.providers.HttpProvider('http://localhost:8545'));
-			//console.log(web3);
 			setTimeout(function(){
 				try{
 					web3Admin.extend(web3);
@@ -86,7 +85,7 @@ module.exports = {
 					resp.json({"status":"error", "errorDetails":"Unable to connect with Ethereum node"});	
 					return;
 				}
-								resp.json({"status":"complete", "message":"Connected with Ethereum node", "enode":web3.admin.nodeInfo.enode, "coinbase":web3.eth.coinbase});
+					resp.json({"status":"complete", "message":"Connected with Ethereum node", "enode":web3.admin.nodeInfo.enode, "coinbase":web3.eth.coinbase});
 			}, 1000);
 			connected = true;
 		}
@@ -98,5 +97,71 @@ module.exports = {
 				resp.json({"status":"error", "errorDetails":"Unable to connect with Ethereum node. Please refresh this page and try again."});	
 			}
 		}	
+	},
+	ethereum: function(req,resp){
+		var type = req.params.type;
+		if(type == ":addPeer"){
+			var enode = req.body.enode;
+			var result;
+			try{
+				result = web3.admin.addPeer(enode);
+			}catch(e){
+				var index = e.toString().indexOf("invalid enode");
+				if(index!=1){
+					resp.json({"status":"complete", "addStatus":"Invalid enode provided. Please check enode and try again."});
+					return;
+				}
+			}
+			resp.json({"status":"complete", "addStatus":"Enode added. You can check the connectivity using peer count or peers."})
+		}else if(type == ":peerCount"){
+			var count = web3.net.peerCount;
+			resp.json({"status":"complete", "count":count});
+		}else if(type == ":peers"){
+			var peers = web3.admin.peers;
+			if(peers.length == 0){
+				resp.json({"status":"complete", "peers":"No Connected Peers"});	
+			}else{
+				resp.json({"status":"complete", "peers":peers});	
+			}
+			
+		}else if(type == ":unlockAccount"){
+			var password = req.body.password;
+			var result;
+			try{
+				result = web3.personal.unlockAccount(web3.eth.coinbase, password);
+			}catch(e){
+				resp.json({"status":"complete", "unlock":"Incorrect Password Entered"});
+				return;
+			}
+			resp.json({"status":"complete", "unlock":"Account Unlocked"});
+		}else if(type == ":balance"){
+			var balance = web3.eth.getBalance(web3.eth.coinbase);
+			resp.json({"status":"complete", "wei":balance, "ether":web3.fromWei(balance, "ether")});
+		}else if(type == ":transaction"){
+			var receiver = req.body.receiver;
+			var amount = req.body.amount;
+			var transactionObj = {from:web3.eth.coinbase, to:receiver, value:web3.toWei(amount, "ether")};
+			var status;
+			try{
+				status = web3.eth.sendTransaction(transactionObj);
+			}catch(e){
+				var index = e.toString().indexOf("authentication needed");
+				if(index != -1){
+					resp.json({"status":"complete", "transactionStatus":"Your account is locked. Can not initiate transaction."});
+					return;
+				}
+				index = e.toString().indexOf("insufficient funds");
+				if(index != -1){
+					resp.json({"status":"complete", "transactionStatus":"Your account has insufficient funds for gas * price + amount that you want to send."});
+					return;
+				}
+				resp.json({"status":"complete", "transactionStatus":"An unknown error occured."});
+				return;
+			}
+			resp.json({"status":"complete", "transactionStatus":"Transaction successfully submitted"});
+		}else if(type == ":transactionStatus"){
+			var status = web3.txpool.status;
+			resp.json({"status":"complete", "pending":parseInt(status.pending,16), "queued":parseInt(status.queued,16)});
+		}
 	}
 }
