@@ -105,7 +105,10 @@ module.exports = {
 					resp.json({"status":"error", "errorDetails":"Unable to connect with Ethereum node"});	
 					return;
 				}
+				if(web3.isConnected())
 					resp.json({"status":"complete", "message":"Connected with Ethereum node", "enode":web3.admin.nodeInfo.enode, "coinbase":web3.eth.coinbase});
+				else
+					resp.json({"status":"error", "errorDetails":"Unable to connect to Ethereum. Please go back and start it."});
 			}, 1000);
 			connected = true;
 		}
