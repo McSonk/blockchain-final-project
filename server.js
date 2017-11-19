@@ -18,5 +18,7 @@ app.listen(port);
 app.post('/api/configureEthereum:type', routes.configureEthereum);
 app.post('/api/ethereum:type', routes.ethereum);
 app.post('/api/startWeb3', routes.startWeb3);
+app.post('/api/checkEthereum', routes.checkEthereum);
+app.post('/api/deleteEverything', routes.deleteEverything);
 
 console.log("Script started. Head over to http://localhost:"+port+ " on your browser");

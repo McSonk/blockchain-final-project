@@ -234,4 +234,65 @@ $(document).ready(function(){
 		});
 	});
 
+
+	$("#startEthereumMove").on('click', function(e){
+		e.preventDefault();
+		$("#loader").fadeIn("fast");
+		var timeout = setTimeout(function(){
+				window.location.href = './ethereum.html';
+			},5000);	
+		$.ajax({
+		    url: '/api/configureEthereum:start', 
+		    type: 'POST', 
+		    contentType: 'application/json'}
+		).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+				clearInterval(timeout);
+				$("#loader").fadeOut("slow");
+			}
+		});
+	});
+
+	$("#stopAllEthereum").on('click', function(e){
+		e.preventDefault();
+		$.ajax({
+		    url: '/api/configureEthereum:stop', 
+		    type: 'POST', 
+		    contentType: 'application/json'}
+		).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				alert(resp.message);
+			}
+		});
+
+	});
+
+	$("#moveToStep2").on('click', function(e){
+		e.preventDefault();
+		window.location.href = './ethereum.html';
+	});
+	
+	$("#deleteEverything").on('click', function(e){
+		e.preventDefault();
+		if(confirm("Are you sure you want to delete everything?")){
+			$.ajax({
+				url: '/api/deleteEverything', 
+			    type: 'POST', 
+			    contentType: 'application/json'
+			}).done(function(resp){
+				if(resp.status == "error"){
+					alert(resp.errorDetails);
+				}else if(resp.status == "complete"){
+					alert(resp.message);
+				}
+			});			
+		}else{
+			return;
+		}
+
+	});
+
 });

@@ -10,7 +10,26 @@
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 	</head>
 	<body>
-		<div class="container">
+		<div id="loader"></div>
+		<div class="container" id="loadedOptions">
+			<div class="row">
+				<div class="col-12">
+					<h1 class="title">Getting Started with Ethereum</h1>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-2"></div>
+				<div class="col-8 text-center">
+					<p>It looks like that you've already set up Ethereum completely or had at least initiated the process. You may choose from one of the following options below to proceed. </p>
+					<button type="button" class="btn btn-primary btn-large" style="margin-bottom: 20px;" id="startEthereumMove">Start Ethereum and Move to Step 2</button><br/>
+					<button type="button" class="btn btn-primary btn-large" style="margin-bottom: 20px;" id="moveToStep2">Move to Step 2</button><br/>
+					<button type="button" class="btn btn-primary btn-large" style="margin-bottom: 20px;" id="stopAllEthereum">Stop all Ethereum Instances</button><br/>
+					<button type="button" class="btn btn-danger btn-large" id="deleteEverything">Delete Everything and start Fresh</button>
+					<p><b>Warning:</b> Doing so will delete all your Ethereum node data including your account and your account balance. Only do so if you are willing to lose all of it.</p>
+				</div>
+			</div>
+		</div>
+		<div class="container" id="mainContent">
 			<div class="row">
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 					<h1 class="title">Getting Started with Ethereum</h1>
@@ -121,5 +140,26 @@
 	<script type="text/javascript" src="js/popper.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/script.js"></script>
+	<script type="text/javascript">
+		$("#mainContent").fadeOut("fast");
+		$("#loadedOptions").fadeOut("fast");
+		$(window).on('load', function(){
+			$.ajax({
+				url: '/api/checkEthereum', 
+				type: 'POST', 
+				contentType: 'application/json'}
+			).done(function(resp){
+				if(resp.status == "error"){
+					alert(resp.errorDetails);
+					$("#loadedOptions").fadeIn('fast');
+					$("#loader").fadeOut('slow');
+
+				}else if(resp.status == "complete"){
+					$("#mainContent").fadeIn("slow");
+					$("#loader").fadeOut('slow');
+				}
+			});
+		});
+	</script>
 	</body>
 </html>

@@ -8,6 +8,25 @@ const folderName = "/home/aneesh/testNodeChain";
 var connected = false;
 
 module.exports = {
+	checkEthereum: function(req, resp){
+		fs.readdir(folderName, function(err, list){
+			if(err){
+				resp.json({"status":"complete", "message":"Instance of Ethereum not found at that location."});
+				return;
+			}
+			resp.json({"status":"error","errorDetails":"You have already configured Ethereum. Please choose options below."});
+		});
+	},
+	deleteEverything: function(req,resp){
+		exec('rm -rf ' + folderName, (err,stdout,stderr) =>{
+			if(err){
+				console.log(err)
+				resp.json({"status":"error", "errorDetails":"Unable to delete everything right now."});
+				return;
+			}
+			resp.json({"status":"complete", "message":"Deleted everything successfully."});
+		});
+	},
 	configureEthereum: function(req, resp){
 		var type = req.params.type;
 		if(type == ":account"){
