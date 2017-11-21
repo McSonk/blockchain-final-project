@@ -199,8 +199,9 @@
 				if(resp.status == "error"){
 					alert(resp.errorDetails);
 				}else if(resp.status == "complete"){
-					$("#enodeAddress").val(resp.enode);
-					$("#coinbaseAddress").val(resp.coinbase);
+					$("#enodeAddress").val(resp.enode1);
+					$("#coinbaseAddress").val(resp.coinbase1);
+					console.log(resp);
 					$("#loader").fadeOut('slow');
 				}
 			});

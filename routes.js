@@ -3,6 +3,7 @@ var fs = require('fs');
 const { exec } = require('child_process');
 const Web3 = require('web3');
 var web3 = new Web3();
+var web3Node2 = new Web3();
 const web3Admin = require('web3admin');
 const directoryNode1 = "/home/aneesh/testNodeChain";
 const directoryNode2 = "/home/aneesh/testNodeChain2";
@@ -25,18 +26,27 @@ module.exports = {
 				resp.json({"status":"error", "errorDetails":"Unable to delete everything right now."});
 				return;
 			}
-			resp.json({"status":"complete", "message":"Deleted everything successfully."});
+			exec('rm -rf ' + directoryNode2, (err,stdout,stderr) =>{
+				if(err){
+					console.log(err)
+					resp.json({"status":"error", "errorDetails":"Unable to delete everything right now."});
+					return;
+				}
+				resp.json({"status":"complete", "message":"Deleted everything successfully."});
+			});
 		});
 	},
 	configureEthereum: function(req, resp){
 		var type = req.params.type;
 		if(type == ":account"){
+			var accountAddress1;
+			var accountAddress2;
 			exec('mkdir '+directoryNode1, (err,stdout,stderr) => {
 				if(err){
 					resp.json({"status":"error","errorDetails":"You have already created an account!"});		
 					return
 				}
-				fs.writeFile(directoryNode1 + "/password.txt", req.body.password, function(err){
+				fs.writeFile(directoryNode1 + "/password.txt", req.body.password1, function(err){
 					if(err){
 						resp.json({"status":"error","errorDetails":"Unable to create a new account right now!"});		
 						return;
@@ -46,14 +56,39 @@ module.exports = {
 							resp.json({"status":"error","accountAddress":"Error Creating your Account right now"});
 							return;
 						}
-						var accountAddress = stdout.split("{")[1];
-						accountAddress = accountAddress.substr(0, accountAddress.length -2);
-						resp.json({"status":"complete","accountAddress":accountAddress});
-
+						accountAddress1 = stdout.split("{")[1];
+						accountAddress1 = accountAddress1.substr(0, accountAddress1.length -2);
 						exec('rm '+ directoryNode1 +'/password.txt', (err,stdout,stderr) =>{
 							if(err){
 								console.log("Error removing password file!");
 							}
+						});
+						exec('mkdir '+directoryNode2, (err,stdout,stderr) => {
+							if(err){
+								resp.json({"status":"error","errorDetails":"You have already created an account!"});		
+								return
+							}
+							fs.writeFile(directoryNode2 + "/password.txt", req.body.password2, function(err){
+								if(err){
+									resp.json({"status":"error","errorDetails":"Unable to create a new account right now!"});		
+									return;
+								}
+								exec('geth account new --password ' + directoryNode2 + '/password.txt --datadir '+ directoryNode2 , (err,stdout,stderr) =>{
+									if(err){
+										resp.json({"status":"error","accountAddress":"Error Creating your Account right now"});
+										return;
+									}
+									accountAddress2 = stdout.split("{")[1];
+									accountAddress2 = accountAddress2.substr(0, accountAddress2.length -2);
+									resp.json({"status":"complete","accountAddress1":accountAddress1,"accountAddress2":accountAddress2});
+
+									exec('rm '+ directoryNode2 +'/password.txt', (err,stdout,stderr) =>{
+										if(err){
+											console.log("Error removing password file!");
+										}
+									});
+								});
+							});
 						});
 					});
 				});
@@ -64,7 +99,13 @@ module.exports = {
 					resp.json({"status":"error","errorDetails":"Unable to create the Genesis file."});		
 					return;
 				}
-				resp.json({"status":"complete","message":"Created the Genesis File with the name customGenesis.json"});		
+				fs.writeFile(directoryNode2 + "/customGenesis.json", req.body.genesisData, function(err){
+					if(err){
+						resp.json({"status":"error","errorDetails":"Unable to create the Genesis file."});		
+						return;
+					}
+					resp.json({"status":"complete","message":"Created the Genesis Files with the name customGenesis.json in both nodes."});		
+				});
 			});
 		}else if(type == ":init"){
 			exec('geth init '+ directoryNode1 + '/customGenesis.json --datadir '+directoryNode1, (err,stdout,stderr) =>{
@@ -72,19 +113,27 @@ module.exports = {
 					resp.json({"status":"error","errorDetails":"Unable to initialize Ethereum. Invalid Genesis file found."});
 					return;	
 				}
-				resp.json({"status":"complete","message":"Initialized Ethereum. You may start it now."});
-				return;
+				exec('geth init '+ directoryNode2 + '/customGenesis.json --datadir '+directoryNode2, (err,stdout,stderr) =>{
+					if(err){
+						resp.json({"status":"error","errorDetails":"Unable to initialize Ethereum. Invalid Genesis file found."});
+						return;	
+					}
+					resp.json({"status":"complete","message":"Initialized both Ethereum nodes. You may start them now."});
+				});
 			});
 		}else if(type == ":start"){
-			exec('geth --datadir '+ directoryNode1 + ' --maxpeers 95 --networkid 13 --nodiscover --rpc --rpccorsdomain "*" --port 30302 --rpcport 8545 --rpcapi="txpool,db,eth,net,web3,personal,admin"', (err, stdout, stderr) =>{
-				console.log("ERR" + err);
-				console.log("stdout" + stdout);
-				console.log("stderr" + stderr);
+			exec('geth --datadir '+ directoryNode1 + ' --maxpeers 95 --networkid 13 --nodiscover --rpc --rpccorsdomain "*" --port 30301 --rpcport 8544 --rpcapi="txpool,db,eth,net,web3,personal,admin"', (err, stdout, stderr) =>{
 				if(err){
 					resp.json({"status":"error","errorDetails":"Unable to start Ethereum. An Instance of Ethereum is already running."});
 					return;	
 				}
-			})
+			});
+			exec('geth --datadir '+ directoryNode2 + ' --maxpeers 95 --networkid 13 --nodiscover --rpc --rpccorsdomain "*" --port 30302 --rpcport 8545 --rpcapi="txpool,db,eth,net,web3,personal,admin"', (err, stdout, stderr) =>{
+				if(err){
+					resp.json({"status":"error","errorDetails":"Unable to start Ethereum. An Instance of Ethereum is already running."});
+					return;	
+				}
+			});
 		}else if(type == ":stop"){
 			exec('pkill geth', (err,stdout,stderr) => {
 				if(err){
@@ -98,24 +147,26 @@ module.exports = {
 	},
 	startWeb3: function(req, resp){
 		if(connected == false){
-			web3.setProvider(new Web3.providers.HttpProvider('http://localhost:8545'));
+			web3.setProvider(new Web3.providers.HttpProvider('http://localhost:8544'));
+			web3Node2.setProvider(new Web3.providers.HttpProvider('http://localhost:8545'));
 			setTimeout(function(){
 				try{
 					web3Admin.extend(web3);
+					web3Admin.extend(web3Node2);
 				}catch(e){
 					resp.json({"status":"error", "errorDetails":"Unable to connect with Ethereum node"});	
 					return;
 				}
-				if(web3.isConnected())
-					resp.json({"status":"complete", "message":"Connected with Ethereum node", "enode":web3.admin.nodeInfo.enode, "coinbase":web3.eth.coinbase});
+				if(web3.isConnected() && web3Node2.isConnected())
+					resp.json({"status":"complete", "message":"Connected with Ethereum node", "enode1":web3.admin.nodeInfo.enode, "coinbase1":web3.eth.coinbase, "enode2":web3Node2.admin.nodeInfo.enode, "coinbase2":web3Node2.eth.coinbase});
 				else
 					resp.json({"status":"error", "errorDetails":"Unable to connect to Ethereum. Please go back and start it."});
 			}, 1000);
 			connected = true;
 		}
 		else{
-			if(web3.isConnected()){
-				resp.json({"status":"complete", "message":"Connected with Ethereum node", "enode":web3.admin.nodeInfo.enode, "coinbase":web3.eth.coinbase});
+			if(web3.isConnected() && web3Node2.isConnected()){
+				resp.json({"status":"complete", "message":"Connected with Ethereum node", "enode1":web3.admin.nodeInfo.enode, "coinbase1":web3.eth.coinbase, "enode2":web3Node2.admin.nodeInfo.enode, "coinbase2":web3Node2.eth.coinbase});
 			}else{
 				connected = false;
 				resp.json({"status":"error", "errorDetails":"Unable to connect with Ethereum node. Please refresh this page and try again."});	

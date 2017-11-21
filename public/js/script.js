@@ -3,21 +3,23 @@ $(document).ready(function(){
 	//Getting Started with Ethereum Functions
 	$("#createNewAccount").on('submit', function(e){
 		e.preventDefault()
-		var password = $("#password").val()
-		if(!password){
-			alert("Please provide a password!");
+		var password = $("#passwordNode1").val()
+		var password2 = $("#passwordNode2").val()
+		if(!password || !password2){
+			alert("Please provide both the passwords!");
 			return
 		}
 		$.ajax({
 		    url: '/api/configureEthereum:account', 
 		    type: 'POST', 
 		    contentType: 'application/json', 
-		    data: JSON.stringify({"password":password})}
+		    data: JSON.stringify({"password1":password,"password2":password2})}
 		).done(function(resp){
 			if(resp.status == "error"){
 				alert(resp.errorDetails);
 			}else if(resp.status == "complete"){
-				$("#accountAddress").val(resp.accountAddress);
+				$("#accountAddressNode1").val(resp.accountAddress1);
+				$("#accountAddressNode2").val(resp.accountAddress2);
 			}
 		});
 	});
