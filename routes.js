@@ -4,12 +4,13 @@ const { exec } = require('child_process');
 const Web3 = require('web3');
 var web3 = new Web3();
 const web3Admin = require('web3admin');
-const folderName = "/home/aneesh/testNodeChain";
+const directoryNode1 = "/home/aneesh/testNodeChain";
+const directoryNode2 = "/home/aneesh/testNodeChain2";
 var connected = false;
 
 module.exports = {
 	checkEthereum: function(req, resp){
-		fs.readdir(folderName, function(err, list){
+		fs.readdir(directoryNode1, function(err, list){
 			if(err){
 				resp.json({"status":"complete", "message":"Instance of Ethereum not found at that location."});
 				return;
@@ -18,7 +19,7 @@ module.exports = {
 		});
 	},
 	deleteEverything: function(req,resp){
-		exec('rm -rf ' + folderName, (err,stdout,stderr) =>{
+		exec('rm -rf ' + directoryNode1, (err,stdout,stderr) =>{
 			if(err){
 				console.log(err)
 				resp.json({"status":"error", "errorDetails":"Unable to delete everything right now."});
@@ -30,17 +31,17 @@ module.exports = {
 	configureEthereum: function(req, resp){
 		var type = req.params.type;
 		if(type == ":account"){
-			exec('mkdir '+folderName, (err,stdout,stderr) => {
+			exec('mkdir '+directoryNode1, (err,stdout,stderr) => {
 				if(err){
 					resp.json({"status":"error","errorDetails":"You have already created an account!"});		
 					return
 				}
-				fs.writeFile(folderName + "/password.txt", req.body.password, function(err){
+				fs.writeFile(directoryNode1 + "/password.txt", req.body.password, function(err){
 					if(err){
 						resp.json({"status":"error","errorDetails":"Unable to create a new account right now!"});		
 						return;
 					}
-					exec('geth account new --password ' + folderName + '/password.txt --datadir '+ folderName , (err,stdout,stderr) =>{
+					exec('geth account new --password ' + directoryNode1 + '/password.txt --datadir '+ directoryNode1 , (err,stdout,stderr) =>{
 						if(err){
 							resp.json({"status":"error","accountAddress":"Error Creating your Account right now"});
 							return;
@@ -49,7 +50,7 @@ module.exports = {
 						accountAddress = accountAddress.substr(0, accountAddress.length -2);
 						resp.json({"status":"complete","accountAddress":accountAddress});
 
-						exec('rm '+ folderName +'/password.txt', (err,stdout,stderr) =>{
+						exec('rm '+ directoryNode1 +'/password.txt', (err,stdout,stderr) =>{
 							if(err){
 								console.log("Error removing password file!");
 							}
@@ -58,7 +59,7 @@ module.exports = {
 				});
 			});
 		}else if(type == ":genesis"){
-			fs.writeFile(folderName + "/customGenesis.json", req.body.genesisData, function(err){
+			fs.writeFile(directoryNode1 + "/customGenesis.json", req.body.genesisData, function(err){
 				if(err){
 					resp.json({"status":"error","errorDetails":"Unable to create the Genesis file."});		
 					return;
@@ -66,7 +67,7 @@ module.exports = {
 				resp.json({"status":"complete","message":"Created the Genesis File with the name customGenesis.json"});		
 			});
 		}else if(type == ":init"){
-			exec('geth init '+ folderName + '/customGenesis.json --datadir '+folderName, (err,stdout,stderr) =>{
+			exec('geth init '+ directoryNode1 + '/customGenesis.json --datadir '+directoryNode1, (err,stdout,stderr) =>{
 				if(err){
 					resp.json({"status":"error","errorDetails":"Unable to initialize Ethereum. Invalid Genesis file found."});
 					return;	
@@ -75,7 +76,7 @@ module.exports = {
 				return;
 			});
 		}else if(type == ":start"){
-			exec('geth --datadir '+ folderName + ' --maxpeers 95 --networkid 13 --nodiscover --rpc --rpccorsdomain "*" --port 30302 --rpcport 8545 --rpcapi="txpool,db,eth,net,web3,personal,admin"', (err, stdout, stderr) =>{
+			exec('geth --datadir '+ directoryNode1 + ' --maxpeers 95 --networkid 13 --nodiscover --rpc --rpccorsdomain "*" --port 30302 --rpcport 8545 --rpcapi="txpool,db,eth,net,web3,personal,admin"', (err, stdout, stderr) =>{
 				console.log("ERR" + err);
 				console.log("stdout" + stdout);
 				console.log("stderr" + stderr);
