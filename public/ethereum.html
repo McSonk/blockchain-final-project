@@ -18,36 +18,47 @@
 			</div>
 		</div>
 		<div class="row" style="margin-top:-20px;">
-			<div class="col-4 text-right">
+			<div class="col-2">
+			</div>
+			<div class="col-5 text-center">
+				<h2>Node 1</h2>
+			</div>
+			<div class="col-5 text-center">
+				<h2>Node 2</h2>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-2 text-center">
 				<label for="enodeAddress" style="margin-top:8px;">Enode</label>
 				<br/>
 				<label for="coinbaseAddress" style="margin-top:15px;">Coinbase Address</label>
 				<br/>
 			</div>
-			<div class="col-8 text-left">
-				<input type="text" style="width: 80%; margin-bottom: 10px;" class="form-control" id="enodeAddress" placeholder="Your Enode address" readonly>
-				<input type="text" style="width: 80%;" class="form-control" id="coinbaseAddress" placeholder="Your Coinbase address" readonly>
+			<div class="col-5">
+				<input type="text" style="margin-bottom: 10px;" class="form-control" id="enodeAddress" placeholder="Your Enode address" readonly>
+				<input type="text" class="form-control" id="coinbaseAddress" placeholder="Your Coinbase address" readonly>
+			</div>
+			<div class="col-5">
+				<input type="text" style="margin-bottom: 10px;" class="form-control" id="enodeAddress2" placeholder="Your Enode address" readonly>
+				<input type="text" class="form-control" id="coinbaseAddress2" placeholder="Your Coinbase address" readonly>
 			</div>
 		</div>
 		<div class="row justify-content-center" style="margin-top: 25px;">
 			<div id="accordion" role="tablist" aria-multiselectable="true">
 				<div class="card">
 					<div class="card-header" role="tab" id="headingOne">
-						<h5 class="mb-0"><a data-toggle="collapse" data-parent="#accordion" href="#connectPeer" aria-expanded="true" aria-controls="connectPeer">Connect to a Peer</a></h5>
+						<h5 class="mb-0"><a data-toggle="collapse" data-parent="#accordion" href="#connectPeer" aria-expanded="true" aria-controls="connectPeer">Connect Peers</a></h5>
 					</div>
 					<div id="connectPeer" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
 						<div class="card-block">
-							<p>If you want to add a new peer, enter their entire enode below, along with the IP Address and the port number.</p>
+							<p>We will connect the two nodes that you created to each other. To do so, we will add the enode of one of the nodes to the other and they both will be connected. Use the button below to connect them.</p>
 							<form id="connectToPeer" class="data-entry-form">
-								<div class="form-group row">
-									<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-										<input type="text" class="form-control" id="destEnode" placeholder="Enter destination Enode here">	
-									</div>
-									<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-										<button type="submit" class="btn btn-primary">Add Peer</button>
+								<div class="form-group row text-center">
+									<div class="col-12">
+										<button type="submit" class="btn btn-primary">Connect Peers</button>
 									</div>
 								</div>
-								<label for="peerStatus">Connected Peer Count</label>
+								<label for="peerStatus">Connected Peer Status</label>
 								<input type="text" class="form-control" id="peerStatus" placeholder="Add Peer Status" readonly>
 							</form>
 						</div>
@@ -60,15 +71,32 @@
 					<div id="checkPeerCount" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
 						<div class="card-block">
 							<p>If you want to check the count of connected peers, press the button below to query and return the result.</p>
-							<form id="checkPeer" class="data-entry-form">
-								<div class="form-group row">
-									<div class="col-12 text-center">
-										<button type="submit" class="btn btn-primary">Check Peer Count</button>
-									</div>
+							<div class="row text-center">
+								<div class="col-6">
+									<h4>Node 1</h4>
+									<form id="checkPeer" class="data-entry-form">
+										<div class="form-group row">
+											<div class="col-12">
+												<button type="submit" class="btn btn-primary">Check Peer Count</button>
+											</div>
+										</div>
+										<label for="peerCount">Connected Peer Count</label>
+										<input type="text" class="form-control" id="peerCount" placeholder="Connected Peer Count" readonly>
+									</form>
 								</div>
-								<label for="peerCount">Connected Peer Count</label>
-								<input type="text" class="form-control" id="peerCount" placeholder="Connected Peer Count" readonly>
-							</form>
+								<div class="col-6">
+									<h4>Node 2</h4>
+									<form id="checkPeer2" class="data-entry-form">
+										<div class="form-group row">
+											<div class="col-12 text-center">
+												<button type="submit" class="btn btn-primary">Check Peer Count</button>
+											</div>
+										</div>
+										<label for="peerCount">Connected Peer Count</label>
+										<input type="text" class="form-control" id="peerCount2" placeholder="Connected Peer Count" readonly>
+									</form>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -79,15 +107,142 @@
 					<div id="checkPeers" class="collapse" role="tabpanel" aria-labelledby="headingThree">
 						<div class="card-block">
 							<p>If you want to check the connected peers, press the button below to query and return the result.</p>
-							<form id="checkPeersForm" class="data-entry-form">
-								<div class="form-group row">
-									<div class="col-12 text-center">
-										<button type="submit" class="btn btn-primary">Check Peers</button>
-									</div>
+							<div class="row text-center">
+								<div class="col-6">
+									<h4>Node 1</h4>
+									<form id="checkPeersForm" class="data-entry-form">
+										<div class="form-group row">
+											<div class="col-12 text-center">
+												<button type="submit" class="btn btn-primary">Check Peers</button>
+											</div>
+										</div>
+										<label for="peerDetails">Connected Peers</label>
+										<textarea rows="7" class="form-control" id="peerDetails" placeholder="Connected Peers Details" readonly></textarea>
+									</form>
 								</div>
-								<label for="peerDetails">Connected Peers</label>
-								<textarea rows="7" class="form-control" id="peerDetails" placeholder="Connected Peers Details" readonly></textarea>
-							</form>
+								<div class="col-6">
+									<h4>Node 2</h4>
+									<form id="checkPeersForm2" class="data-entry-form">
+										<div class="form-group row">
+											<div class="col-12 text-center">
+												<button type="submit" class="btn btn-primary">Check Peers</button>
+											</div>
+										</div>
+										<label for="peerDetails">Connected Peers</label>
+										<textarea rows="7" class="form-control" id="peerDetails2" placeholder="Connected Peers Details" readonly></textarea>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header" role="tab" id="headingThree">
+						<h5 class="mb-0"><a data-toggle="collapse" data-parent="#accordion" href="#createAccounts" aria-expanded="true" aria-controls="createAccounts">Create New Accounts</a></h5>
+					</div>
+					<div id="createAccounts" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+						<div class="card-block">
+							<p>Let us create a few more accounts (4) for every node. Enter the password for the coinbase account so we can use the same password for the other accounts as well.</p>
+							<p><b>We are using the same password so it makes it easy to remember the password. In reality, make sure you use different passwords</b></p>
+							<div class="row text-center">
+								<div class="col-6">
+									<h4>Node 1</h4>
+									<form id="accountForm" class="data-entry-form">
+										<div class="form-group row">
+											<div class="col-6">
+												<input type="text" class="form-control" id="accountPassword" placeholder="Enter your Password here">
+											</div>
+											<div class="col-6">
+												<button type="submit" class="btn btn-primary">Create 4 accounts</button>
+											</div>
+										</div>
+										<label for="createAccountStatus">Account Creation Status</label>
+										<input type="text" class="form-control" id="createAccountStatus" placeholder="Account Unlock Status" readonly>
+									</form>
+								</div>
+								<div class="col-6">
+									<h4>Node 2</h4>
+									<form id="accountForm2" class="data-entry-form">
+										<div class="form-group row">
+											<div class="col-6">
+												<input type="text" class="form-control" id="accountPassword2" placeholder="Enter your Password here">
+											</div>
+											<div class="col-6">
+												<button type="submit" class="btn btn-primary">Create 4 accounts</button>
+											</div>
+										</div>
+										<label for="createAccountStatus2">Account Creation Status</label>
+										<input type="text" class="form-control" id="createAccountStatus2" placeholder="Account Unlock Status" readonly>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header" role="tab" id="headingSix">
+						<h5 class="mb-0"><a data-toggle="collapse" data-parent="#accordion" href="#checkBalance" aria-expanded="true" aria-controls="checkBalance">List Accounts and Check Balance</a></h5>
+					</div>
+					<div id="checkBalance" class="collapse" role="tabpanel" aria-labelledby="headingSix">
+						<div class="card-block">
+							<p>If you want to check your balance, press the button below to query and return the result for all the accounts.</p>
+							<div class="row text-center">
+								<div class="col-6">
+									<h4>Node 1</h4>
+									<form id="checkBalanceForm" class="data-entry-form">
+										<div class="form-group row">
+											<div class="col-12 text-center">
+												<button type="submit" class="btn btn-primary">Check Balance</button>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-6">
+												<label for="accountAddress">Account Address</label>
+											</div>
+											<div class="col-3">
+												<label for="balanceWei">Balance (in Weis)</label>
+											</div>
+											<div class="col-3">
+												<label for="balanceEther">Balance (in Ethers)</label>
+											</div>
+										</div>
+										<div class="row" id="accountList">
+											
+										</div>
+										
+										
+										
+									</form>
+								</div>
+								<div class="col-6">
+									<h4>Node 2</h4>
+									<form id="checkBalanceForm2" class="data-entry-form">
+										<div class="form-group row">
+											<div class="col-12 text-center">
+												<button type="submit" class="btn btn-primary">Check Balance</button>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-6">
+												<label for="accountAddress">Account Address</label>
+											</div>
+											<div class="col-3">
+												<label for="balanceWei">Balance (in Weis)</label>
+											</div>
+											<div class="col-3">
+												<label for="balanceEther">Balance (in Ethers)</label>
+											</div>
+										</div>
+										<div class="row" id="accountList2">
+											
+										</div>
+										
+										
+										
+									</form>
+								</div>
+							</div>
+							
 						</div>
 					</div>
 				</div>
@@ -114,23 +269,28 @@
 					</div>
 				</div>
 				<div class="card">
-					<div class="card-header" role="tab" id="headingSix">
-						<h5 class="mb-0"><a data-toggle="collapse" data-parent="#accordion" href="#checkBalance" aria-expanded="true" aria-controls="checkBalance">Check Balance</a></h5>
+					<div class="card-header" role="tab" id="headingFive">
+						<h5 class="mb-0"><a data-toggle="collapse" data-parent="#accordion" href="#miner" aria-expanded="true" aria-controls="miner">Miner</a></h5>
 					</div>
-					<div id="checkBalance" class="collapse" role="tabpanel" aria-labelledby="headingSix">
+					<div id="miner" class="collapse" role="tabpanel" aria-labelledby="headingFive">
 						<div class="card-block">
-							<p>If you want to check your balance, press the button below to query and return the result.</p>
-							<form id="checkBalanceForm" class="data-entry-form">
-								<div class="form-group row">
-									<div class="col-12 text-center">
-										<button type="submit" class="btn btn-primary">Check Balance</button>
-									</div>
+							<p>If you want to Start or Stop a miner, use the buttons below to do so for either of the two nodes.</p>
+							<div class="row text-center">
+								<div class="col-6">
+									<h4>Node 1</h4>
+									<button type="button" class="btn btn-primary btn-large" style="margin-bottom: 20px;" id="startMiner">Start Miner</button><br/>
+									<button type="button" class="btn btn-primary btn-large" style="margin-bottom: 20px;" id="stopMiner">Stop Miner</button><br/>
+									<label for="minerStatus">Miner Response</label>
+									<input type="text" class="form-control" id="minerStatus" placeholder="Miner Response" readonly>
 								</div>
-								<label for="balanceWei">Balance (in Weis)</label>
-								<input type="text" class="form-control" id="balanceWei" placeholder="Balance (in Weis)" readonly>
-								<label for="balanceEther">Balance (in Ethers)</label>
-								<input type="text" class="form-control" id="balanceEther" placeholder="Balance (in Weis)" readonly>
-							</form>
+								<div class="col-6">
+									<h4>Node 2</h4>
+									<button type="button" class="btn btn-primary btn-large" style="margin-bottom: 20px;" id="startMiner2">Start Miner</button><br/>
+									<button type="button" class="btn btn-primary btn-large" style="margin-bottom: 20px;" id="stopMiner2">Stop Miner</button><br/>
+									<label for="minerStatus2">Miner Response</label>
+									<input type="text" class="form-control" id="minerStatus2" placeholder="Miner Response" readonly>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -201,7 +361,8 @@
 				}else if(resp.status == "complete"){
 					$("#enodeAddress").val(resp.enode1);
 					$("#coinbaseAddress").val(resp.coinbase1);
-					console.log(resp);
+					$("#enodeAddress2").val(resp.enode2);
+					$("#coinbaseAddress2").val(resp.coinbase2);
 					$("#loader").fadeOut('slow');
 				}
 			});

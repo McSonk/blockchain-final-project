@@ -111,18 +111,11 @@ $(document).ready(function(){
 	//Performing Ethereum Functions
 	$("#connectToPeer").on('submit', function(e){
 		e.preventDefault();		
-		var enode = $("#destEnode").val();
-		
-		if(!enode){
-			alert("Please enter the enode!");
-			return;
-		}
 		$.ajax({
 		    url: '/api/ethereum:addPeer', 
 		    type: 'POST', 
-		    contentType: 'application/json',
-		    data: JSON.stringify({"enode":enode})}
-		).done(function(resp){
+		    contentType: 'application/json'
+		}).done(function(resp){
 			if(resp.status == "error"){
 				alert(resp.errorDetails);
 			}else if(resp.status == "complete"){
@@ -136,12 +129,29 @@ $(document).ready(function(){
 		$.ajax({
 		    url: '/api/ethereum:peerCount', 
 		    type: 'POST', 
-		    contentType: 'application/json'}
-		).done(function(resp){
+		    contentType: 'application/json',
+		    data:JSON.stringify({"node":1})
+		}).done(function(resp){
 			if(resp.status == "error"){
 				alert(resp.errorDetails);
 			}else if(resp.status == "complete"){
 				$("#peerCount").val(resp.count);
+			}
+		});
+	});
+
+	$("#checkPeer2").on('submit', function(e){
+		e.preventDefault();		
+		$.ajax({
+		    url: '/api/ethereum:peerCount', 
+		    type: 'POST', 
+		    contentType: 'application/json',
+		    data:JSON.stringify({"node":2})
+		}).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#peerCount2").val(resp.count);
 			}
 		});
 	});
@@ -151,12 +161,102 @@ $(document).ready(function(){
 		$.ajax({
 		    url: '/api/ethereum:peers', 
 		    type: 'POST', 
-		    contentType: 'application/json'}
-		).done(function(resp){
+		    contentType: 'application/json',
+		    data:JSON.stringify({"node":1})
+		}).done(function(resp){
 			if(resp.status == "error"){
 				alert(resp.errorDetails);
 			}else if(resp.status == "complete"){
 				$("#peerDetails").val(resp.peers);
+			}
+		});
+	});
+
+	$("#checkPeersForm2").on('submit', function(e){
+		e.preventDefault();		
+		$.ajax({
+		    url: '/api/ethereum:peers', 
+		    type: 'POST', 
+		    contentType: 'application/json',
+		    data:JSON.stringify({"node":2})
+		}).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#peerDetails2").val(resp.peers);
+			}
+		});
+	});
+
+	$("#accountForm").on('submit', function(e){
+		e.preventDefault();
+		var password = $("#accountPassword").val();
+		if(!password){
+			alert("Please enter a password!");
+			return;
+		}
+		$.ajax({
+			url: '/api/ethereum:newAccounts', 
+		    type: 'POST', 
+		    contentType: 'application/json',
+		    data:JSON.stringify({"node":1,"password":password})
+		}).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#createAccountStatus").val(resp.message);
+			}
+		});
+	});
+	$("#accountForm2").on('submit', function(e){
+		e.preventDefault();
+		var password = $("#accountPassword2").val();
+		if(!password){
+			alert("Please enter a password!");
+			return;
+		}
+		$.ajax({
+			url: '/api/ethereum:newAccounts', 
+		    type: 'POST', 
+		    contentType: 'application/json',
+		    data:JSON.stringify({"node":2,"password":password})
+		}).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#createAccountStatus").val(resp.message);
+			}
+		});
+	});
+
+	$("#checkBalanceForm").on('submit', function(e){
+		e.preventDefault();		
+		$.ajax({
+		    url: '/api/ethereum:balance', 
+		    type: 'POST', 
+		    contentType: 'application/json',
+		    data:JSON.stringify({"node":1})
+		}).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				addListAndBalance($("#accountList"),resp);
+			}
+		});
+	});
+
+	$("#checkBalanceForm2").on('submit', function(e){
+		e.preventDefault();		
+		$.ajax({
+		    url: '/api/ethereum:balance', 
+		    type: 'POST', 
+		    contentType: 'application/json',
+		    data:JSON.stringify({"node":2})
+		}).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				addListAndBalance($("#accountList2"),resp);
 			}
 		});
 	});
@@ -182,18 +282,66 @@ $(document).ready(function(){
 		});
 	});
 
-	$("#checkBalanceForm").on('submit', function(e){
+	$("#startMiner").on('click', function(e){
 		e.preventDefault();		
 		$.ajax({
-		    url: '/api/ethereum:balance', 
+		    url: '/api/ethereum:minerStart', 
 		    type: 'POST', 
-		    contentType: 'application/json'}
-		).done(function(resp){
+		    contentType: 'application/json',
+		    data:JSON.stringify({"node":1})
+		}).done(function(resp){
 			if(resp.status == "error"){
 				alert(resp.errorDetails);
 			}else if(resp.status == "complete"){
-				$("#balanceWei").val(resp.wei);
-				$("#balanceEther").val(resp.ether);
+				$("#minerStatus").val(resp.message);
+			}
+		});
+	});
+
+	$("#stopMiner").on('click', function(e){
+		e.preventDefault();		
+		$.ajax({
+		    url: '/api/ethereum:minerStop', 
+		    type: 'POST', 
+		    contentType: 'application/json',
+		    data:JSON.stringify({"node":1})
+		}).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#minerStatus").val(resp.message);
+			}
+		});
+	});
+
+	$("#startMiner2").on('click', function(e){
+		e.preventDefault();		
+		$.ajax({
+		    url: '/api/ethereum:minerStart', 
+		    type: 'POST', 
+		    contentType: 'application/json',
+		    data:JSON.stringify({"node":2})
+		}).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#minerStatus2").val(resp.message);
+			}
+		});
+	});
+
+	$("#stopMiner2").on('click', function(e){
+		e.preventDefault();		
+		$.ajax({
+		    url: '/api/ethereum:minerStop', 
+		    type: 'POST', 
+		    contentType: 'application/json',
+		    data:JSON.stringify({"node":2})
+		}).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#minerStatus2").val(resp.message);
 			}
 		});
 	});
@@ -299,3 +447,12 @@ $(document).ready(function(){
 	});
 
 });
+
+function addListAndBalance(element, resp){
+	element.empty();
+	for(var i = 0; i <resp.account.length; i++){
+		var temp = '<div class="col-6"><input type="text" class="form-control" id="accountAddress" placeholder="Account Address" readonly value='+ resp.account[i] +'></div><div class="col-3"><input type="text" class="form-control" id="balanceWei" placeholder="Balance (in Weis)" readonly value='+ resp.wei[i] +'></div><div class="col-3"><input type="text" class="form-control" id="balanceEther" placeholder="Balance (in Ether)" readonly value='+ resp.ether[i] +'></div>';
+		element.append(temp);
+	}
+	
+}
