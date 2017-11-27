@@ -3,21 +3,23 @@ $(document).ready(function(){
 	//Getting Started with Ethereum Functions
 	$("#createNewAccount").on('submit', function(e){
 		e.preventDefault()
-		var password = $("#password").val()
-		if(!password){
-			alert("Please provide a password!");
+		var password = $("#passwordNode1").val()
+		var password2 = $("#passwordNode2").val()
+		if(!password || !password2){
+			alert("Please provide both the passwords!");
 			return
 		}
 		$.ajax({
 		    url: '/api/configureEthereum:account', 
 		    type: 'POST', 
 		    contentType: 'application/json', 
-		    data: JSON.stringify({"password":password})}
+		    data: JSON.stringify({"password1":password,"password2":password2})}
 		).done(function(resp){
 			if(resp.status == "error"){
 				alert(resp.errorDetails);
 			}else if(resp.status == "complete"){
-				$("#accountAddress").val(resp.accountAddress);
+				$("#accountAddressNode1").val(resp.accountAddress1);
+				$("#accountAddressNode2").val(resp.accountAddress2);
 			}
 		});
 	});
@@ -109,18 +111,11 @@ $(document).ready(function(){
 	//Performing Ethereum Functions
 	$("#connectToPeer").on('submit', function(e){
 		e.preventDefault();		
-		var enode = $("#destEnode").val();
-		
-		if(!enode){
-			alert("Please enter the enode!");
-			return;
-		}
 		$.ajax({
 		    url: '/api/ethereum:addPeer', 
 		    type: 'POST', 
-		    contentType: 'application/json',
-		    data: JSON.stringify({"enode":enode})}
-		).done(function(resp){
+		    contentType: 'application/json'
+		}).done(function(resp){
 			if(resp.status == "error"){
 				alert(resp.errorDetails);
 			}else if(resp.status == "complete"){
@@ -134,12 +129,29 @@ $(document).ready(function(){
 		$.ajax({
 		    url: '/api/ethereum:peerCount', 
 		    type: 'POST', 
-		    contentType: 'application/json'}
-		).done(function(resp){
+		    contentType: 'application/json',
+		    data:JSON.stringify({"node":1})
+		}).done(function(resp){
 			if(resp.status == "error"){
 				alert(resp.errorDetails);
 			}else if(resp.status == "complete"){
 				$("#peerCount").val(resp.count);
+			}
+		});
+	});
+
+	$("#checkPeer2").on('submit', function(e){
+		e.preventDefault();		
+		$.ajax({
+		    url: '/api/ethereum:peerCount', 
+		    type: 'POST', 
+		    contentType: 'application/json',
+		    data:JSON.stringify({"node":2})
+		}).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#peerCount2").val(resp.count);
 			}
 		});
 	});
@@ -149,8 +161,9 @@ $(document).ready(function(){
 		$.ajax({
 		    url: '/api/ethereum:peers', 
 		    type: 'POST', 
-		    contentType: 'application/json'}
-		).done(function(resp){
+		    contentType: 'application/json',
+		    data:JSON.stringify({"node":1})
+		}).done(function(resp){
 			if(resp.status == "error"){
 				alert(resp.errorDetails);
 			}else if(resp.status == "complete"){
@@ -159,23 +172,59 @@ $(document).ready(function(){
 		});
 	});
 
-	$("#unlockAccountForm").on('submit', function(e){
+	$("#checkPeersForm2").on('submit', function(e){
 		e.preventDefault();		
-		var password = $("#password").val();
-		if(!password){
-			alert("Please enter your password!");
-			return;
-		}
 		$.ajax({
-		    url: '/api/ethereum:unlockAccount', 
+		    url: '/api/ethereum:peers', 
 		    type: 'POST', 
 		    contentType: 'application/json',
-		    data: JSON.stringify({"password":password})}
-		).done(function(resp){
+		    data:JSON.stringify({"node":2})
+		}).done(function(resp){
 			if(resp.status == "error"){
 				alert(resp.errorDetails);
 			}else if(resp.status == "complete"){
-				$("#unlockStatus").val(resp.unlock);
+				$("#peerDetails2").val(resp.peers);
+			}
+		});
+	});
+
+	$("#accountForm").on('submit', function(e){
+		e.preventDefault();
+		var password = $("#accountPassword").val();
+		if(!password){
+			alert("Please enter a password!");
+			return;
+		}
+		$.ajax({
+			url: '/api/ethereum:newAccounts', 
+		    type: 'POST', 
+		    contentType: 'application/json',
+		    data:JSON.stringify({"node":1,"password":password})
+		}).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#createAccountStatus").val(resp.message);
+			}
+		});
+	});
+	$("#accountForm2").on('submit', function(e){
+		e.preventDefault();
+		var password = $("#accountPassword2").val();
+		if(!password){
+			alert("Please enter a password!");
+			return;
+		}
+		$.ajax({
+			url: '/api/ethereum:newAccounts', 
+		    type: 'POST', 
+		    contentType: 'application/json',
+		    data:JSON.stringify({"node":2,"password":password})
+		}).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#createAccountStatus").val(resp.message);
 			}
 		});
 	});
@@ -185,35 +234,183 @@ $(document).ready(function(){
 		$.ajax({
 		    url: '/api/ethereum:balance', 
 		    type: 'POST', 
-		    contentType: 'application/json'}
-		).done(function(resp){
+		    contentType: 'application/json',
+		    data:JSON.stringify({"node":1})
+		}).done(function(resp){
 			if(resp.status == "error"){
 				alert(resp.errorDetails);
 			}else if(resp.status == "complete"){
-				$("#balanceWei").val(resp.wei);
-				$("#balanceEther").val(resp.ether);
+				addListAndBalance($("#accountList"),resp);
+			}
+		});
+	});
+
+	$("#checkBalanceForm2").on('submit', function(e){
+		e.preventDefault();		
+		$.ajax({
+		    url: '/api/ethereum:balance', 
+		    type: 'POST', 
+		    contentType: 'application/json',
+		    data:JSON.stringify({"node":2})
+		}).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				addListAndBalance($("#accountList2"),resp);
+			}
+		});
+	});
+
+	$("#unlockAccountForm").on('submit', function(e){
+		e.preventDefault();		
+		var account = $("#unlockAccountID").val();
+		var password = $("#password").val();
+		if(!password || !account){
+			alert("Please enter your account address and password!");
+			return;
+		}
+		$.ajax({
+		    url: '/api/ethereum:unlockAccount', 
+		    type: 'POST', 
+		    contentType: 'application/json',
+		    data: JSON.stringify({"account":account, "password":password, "node":1})
+		}).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#unlockStatus").val(resp.unlock);
+			}
+		});
+	});
+
+	$("#unlockAccountForm2").on('submit', function(e){
+		e.preventDefault();		
+		var account = $("#unlockAccountID2").val();
+		var password = $("#password2").val();
+		if(!password || !account){
+			alert("Please enter your account address and password!");
+			return;
+		}
+		$.ajax({
+		    url: '/api/ethereum:unlockAccount', 
+		    type: 'POST', 
+		    contentType: 'application/json',
+		    data: JSON.stringify({"account":account, "password":password, "node":2})
+		}).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#unlockStatus2").val(resp.unlock);
+			}
+		});
+	});
+
+	$("#startMiner").on('click', function(e){
+		e.preventDefault();		
+		$.ajax({
+		    url: '/api/ethereum:minerStart', 
+		    type: 'POST', 
+		    contentType: 'application/json',
+		    data:JSON.stringify({"node":1})
+		}).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#minerStatus").val(resp.message);
+			}
+		});
+	});
+
+	$("#stopMiner").on('click', function(e){
+		e.preventDefault();		
+		$.ajax({
+		    url: '/api/ethereum:minerStop', 
+		    type: 'POST', 
+		    contentType: 'application/json',
+		    data:JSON.stringify({"node":1})
+		}).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#minerStatus").val(resp.message);
+			}
+		});
+	});
+
+	$("#startMiner2").on('click', function(e){
+		e.preventDefault();		
+		$.ajax({
+		    url: '/api/ethereum:minerStart', 
+		    type: 'POST', 
+		    contentType: 'application/json',
+		    data:JSON.stringify({"node":2})
+		}).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#minerStatus2").val(resp.message);
+			}
+		});
+	});
+
+	$("#stopMiner2").on('click', function(e){
+		e.preventDefault();		
+		$.ajax({
+		    url: '/api/ethereum:minerStop', 
+		    type: 'POST', 
+		    contentType: 'application/json',
+		    data:JSON.stringify({"node":2})
+		}).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#minerStatus2").val(resp.message);
 			}
 		});
 	});
 
 	$("#sendTransactionForm").on('submit', function(e){
 		e.preventDefault();		
+		var sender = $("#senderAddress").val();
 		var receiver = $("#destinationAddress").val();
 		var amount = $("#sendAmount").val();
-		if(!receiver || !amount){
-			alert("Please enter both the receiver and the amount!");
+		if(!receiver || !amount || !sender){
+			alert("Please enter all the details!");
 			return;
 		}
 		$.ajax({
 		    url: '/api/ethereum:transaction', 
 		    type: 'POST', 
 		    contentType: 'application/json',
-		    data: JSON.stringify({"receiver":receiver, "amount":amount})}
-		).done(function(resp){
+		    data: JSON.stringify({"node":1,"sender":sender,"receiver":receiver, "amount":amount})
+		}).done(function(resp){
 			if(resp.status == "error"){
 				alert(resp.errorDetails);
 			}else if(resp.status == "complete"){
 				$("#transactionStatus").val(resp.transactionStatus);
+			}
+		});
+	});
+
+	$("#sendTransactionForm2").on('submit', function(e){
+		e.preventDefault();		
+		var sender = $("#senderAddress2").val();
+		var receiver = $("#destinationAddress2").val();
+		var amount = $("#sendAmount2").val();
+		if(!receiver || !amount || !sender){
+			alert("Please enter all the details!");
+			return;
+		}
+		$.ajax({
+		    url: '/api/ethereum:transaction', 
+		    type: 'POST', 
+		    contentType: 'application/json',
+		    data: JSON.stringify({"node":2,"sender":sender,"receiver":receiver, "amount":amount})
+		}).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#transactionStatus2").val(resp.transactionStatus);
 			}
 		});
 	});
@@ -223,13 +420,31 @@ $(document).ready(function(){
 		$.ajax({
 		    url: '/api/ethereum:transactionStatus', 
 		    type: 'POST', 
-		    contentType: 'application/json'}
-		).done(function(resp){
+		    contentType: 'application/json',
+		    data:JSON.stringify({"node":1})
+		}).done(function(resp){
 			if(resp.status == "error"){
 				alert(resp.errorDetails);
 			}else if(resp.status == "complete"){
 				$("#pendingTransactions").val(resp.pending);
 				$("#queuedTransactions").val(resp.queued);
+			}
+		});
+	});
+
+	$("#checkTransactionForm2").on('submit', function(e){
+		e.preventDefault();		
+		$.ajax({
+		    url: '/api/ethereum:transactionStatus', 
+		    type: 'POST', 
+		    contentType: 'application/json',
+		    data:JSON.stringify({"node":2})
+		}).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#pendingTransactions2").val(resp.pending);
+				$("#queuedTransactions2").val(resp.queued);
 			}
 		});
 	});
@@ -297,3 +512,12 @@ $(document).ready(function(){
 	});
 
 });
+
+function addListAndBalance(element, resp){
+	element.empty();
+	for(var i = 0; i <resp.account.length; i++){
+		var temp = '<div class="col-6"><input type="text" class="form-control" id="accountAddress" placeholder="Account Address" readonly value='+ resp.account[i] +'></div><div class="col-3"><input type="text" class="form-control" id="balanceWei" placeholder="Balance (in Weis)" readonly value='+ resp.wei[i] +'></div><div class="col-3"><input type="text" class="form-control" id="balanceEther" placeholder="Balance (in Ether)" readonly value='+ resp.ether[i] +'></div>';
+		element.append(temp);
+	}
+	
+}
