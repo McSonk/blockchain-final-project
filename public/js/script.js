@@ -263,21 +263,44 @@ $(document).ready(function(){
 
 	$("#unlockAccountForm").on('submit', function(e){
 		e.preventDefault();		
+		var account = $("#unlockAccountID").val();
 		var password = $("#password").val();
-		if(!password){
-			alert("Please enter your password!");
+		if(!password || !account){
+			alert("Please enter your account address and password!");
 			return;
 		}
 		$.ajax({
 		    url: '/api/ethereum:unlockAccount', 
 		    type: 'POST', 
 		    contentType: 'application/json',
-		    data: JSON.stringify({"password":password})}
-		).done(function(resp){
+		    data: JSON.stringify({"account":account, "password":password, "node":1})
+		}).done(function(resp){
 			if(resp.status == "error"){
 				alert(resp.errorDetails);
 			}else if(resp.status == "complete"){
 				$("#unlockStatus").val(resp.unlock);
+			}
+		});
+	});
+
+	$("#unlockAccountForm2").on('submit', function(e){
+		e.preventDefault();		
+		var account = $("#unlockAccountID2").val();
+		var password = $("#password2").val();
+		if(!password || !account){
+			alert("Please enter your account address and password!");
+			return;
+		}
+		$.ajax({
+		    url: '/api/ethereum:unlockAccount', 
+		    type: 'POST', 
+		    contentType: 'application/json',
+		    data: JSON.stringify({"account":account, "password":password, "node":2})
+		}).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#unlockStatus2").val(resp.unlock);
 			}
 		});
 	});
@@ -348,22 +371,46 @@ $(document).ready(function(){
 
 	$("#sendTransactionForm").on('submit', function(e){
 		e.preventDefault();		
+		var sender = $("#senderAddress").val();
 		var receiver = $("#destinationAddress").val();
 		var amount = $("#sendAmount").val();
-		if(!receiver || !amount){
-			alert("Please enter both the receiver and the amount!");
+		if(!receiver || !amount || !sender){
+			alert("Please enter all the details!");
 			return;
 		}
 		$.ajax({
 		    url: '/api/ethereum:transaction', 
 		    type: 'POST', 
 		    contentType: 'application/json',
-		    data: JSON.stringify({"receiver":receiver, "amount":amount})}
-		).done(function(resp){
+		    data: JSON.stringify({"node":1,"sender":sender,"receiver":receiver, "amount":amount})
+		}).done(function(resp){
 			if(resp.status == "error"){
 				alert(resp.errorDetails);
 			}else if(resp.status == "complete"){
 				$("#transactionStatus").val(resp.transactionStatus);
+			}
+		});
+	});
+
+	$("#sendTransactionForm2").on('submit', function(e){
+		e.preventDefault();		
+		var sender = $("#senderAddress2").val();
+		var receiver = $("#destinationAddress2").val();
+		var amount = $("#sendAmount2").val();
+		if(!receiver || !amount || !sender){
+			alert("Please enter all the details!");
+			return;
+		}
+		$.ajax({
+		    url: '/api/ethereum:transaction', 
+		    type: 'POST', 
+		    contentType: 'application/json',
+		    data: JSON.stringify({"node":2,"sender":sender,"receiver":receiver, "amount":amount})
+		}).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#transactionStatus2").val(resp.transactionStatus);
 			}
 		});
 	});
@@ -373,13 +420,31 @@ $(document).ready(function(){
 		$.ajax({
 		    url: '/api/ethereum:transactionStatus', 
 		    type: 'POST', 
-		    contentType: 'application/json'}
-		).done(function(resp){
+		    contentType: 'application/json',
+		    data:JSON.stringify({"node":1})
+		}).done(function(resp){
 			if(resp.status == "error"){
 				alert(resp.errorDetails);
 			}else if(resp.status == "complete"){
 				$("#pendingTransactions").val(resp.pending);
 				$("#queuedTransactions").val(resp.queued);
+			}
+		});
+	});
+
+	$("#checkTransactionForm2").on('submit', function(e){
+		e.preventDefault();		
+		$.ajax({
+		    url: '/api/ethereum:transactionStatus', 
+		    type: 'POST', 
+		    contentType: 'application/json',
+		    data:JSON.stringify({"node":2})
+		}).done(function(resp){
+			if(resp.status == "error"){
+				alert(resp.errorDetails);
+			}else if(resp.status == "complete"){
+				$("#pendingTransactions2").val(resp.pending);
+				$("#queuedTransactions2").val(resp.queued);
 			}
 		});
 	});

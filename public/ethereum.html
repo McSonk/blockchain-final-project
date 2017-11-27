@@ -252,19 +252,49 @@
 					</div>
 					<div id="unlockAccount" class="collapse" role="tabpanel" aria-labelledby="headingFour">
 						<div class="card-block">
-							<p>If you want to unlock your account, please enter the password you used to create the account and submit the form.</p>
-							<form id="unlockAccountForm" class="data-entry-form">
-								<div class="form-group row">
-									<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-										<input type="text" class="form-control" id="password" placeholder="Enter your Password here">	
-									</div>
-									<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-										<button type="submit" class="btn btn-primary">Unlock Account</button>
-									</div>
+							<p>If you want to unlock your account, please enter the account address and the password you used to create the account and submit the form.</p>
+							<div class="row text-center">
+								<div class="col-6">
+									<h4>Node 1</h4>
+									<form id="unlockAccountForm" class="data-entry-form">
+										<div class="form-group row">
+											<div class="col-6">
+												<input type="text" class="form-control" id="unlockAccountID" placeholder="Enter the account address here">	
+											</div>
+											<div class="col-6">
+												<input type="text" class="form-control" id="password" placeholder="Enter your Password here">
+											</div>
+										</div>
+										<div class="form-group row text-center">
+											<div class="col-12">
+												<button type="submit" class="btn btn-primary">Unlock Account</button>
+											</div>
+										</div>
+										<label for="unlockStatus">Unlock Status</label>
+										<input type="text" class="form-control" id="unlockStatus" placeholder="Account Unlock Status" readonly>
+									</form>
 								</div>
-								<label for="unlockStatus">Unlock Status</label>
-								<input type="text" class="form-control" id="unlockStatus" placeholder="Account Unlock Status" readonly>
-							</form>
+								<div class="col-6">
+									<h4>Node 2</h4>
+									<form id="unlockAccountForm2" class="data-entry-form">
+										<div class="form-group row">
+											<div class="col-6">
+												<input type="text" class="form-control" id="unlockAccountID2" placeholder="Enter the account address here">	
+											</div>
+											<div class="col-6">
+												<input type="text" class="form-control" id="password2" placeholder="Enter your Password here">
+											</div>
+										</div>
+										<div class="form-group row text-center">
+											<div class="col-12">
+												<button type="submit" class="btn btn-primary">Unlock Account</button>
+											</div>
+										</div>
+										<label for="unlockStatus2">Unlock Status</label>
+										<input type="text" class="form-control" id="unlockStatus2" placeholder="Account Unlock Status" readonly>
+									</form>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -300,24 +330,51 @@
 					</div>
 					<div id="sendTransaction" class="collapse" role="tabpanel" aria-labelledby="headingFive">
 						<div class="card-block">
-							<p>If you want to initiate a transaction, enter the receiver's account address (coinbase) and the amount you want to send in ethers. Please make sure you unlock your account and you have sufficient funds.</p>
-							<form id="sendTransactionForm" class="data-entry-form">
-								<div class="form-group row">
-									<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-										<input type="text" class="form-control" id="destinationAddress" placeholder="Enter receiver's account address here">	
-									</div>
-									<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-										<input type="text" class="form-control" id="sendAmount" placeholder="Enter the amount (in Ethers)">	
-									</div>
+							<p>If you want to initiate a transaction, enter the sender's account address, the receiver's account address and the amount you want to send in ethers. Please make sure you unlock the sender account at the respective node and you have sufficient funds.</p>
+							<div class="row">
+								<div class="col-6">
+									<h4>Node 1</h4>
+									<form id="sendTransactionForm" class="data-entry-form">
+										<div class="form-group row">
+											<div class="col-6">
+												<input type="text" class="form-control" id="senderAddress" placeholder="Enter sender's account address here">	
+											</div>
+											<div class="col-6">
+												<input type="text" class="form-control" id="destinationAddress" placeholder="Enter receiver's account address here">	
+											</div>
+											<div class="col-6">
+												<input type="text" class="form-control" id="sendAmount" placeholder="Enter the amount (in Ethers)">	
+											</div>
+											<div class="col-6">
+												<button type="submit" class="btn btn-primary">Send Transaction</button>
+											</div>
+										</div>
+										<label for="transactionStatus">Transaction Status</label>
+										<input type="text" class="form-control" id="transactionStatus" placeholder="Account Unlock Status" readonly>
+									</form>
 								</div>
-								<div class="form-group row">
-									<div class="col-12 text-center">
-										<button type="submit" class="btn btn-primary">Send Transaction</button>
-									</div>
+								<div class="col-6">
+									<h4>Node 2</h4>
+									<form id="sendTransactionForm2" class="data-entry-form">
+										<div class="form-group row">
+											<div class="col-6">
+												<input type="text" class="form-control" id="senderAddress2" placeholder="Enter sender's account address here">	
+											</div>
+											<div class="col-6">
+												<input type="text" class="form-control" id="destinationAddress2" placeholder="Enter receiver's account address here">	
+											</div>
+											<div class="col-6">
+												<input type="text" class="form-control" id="sendAmount2" placeholder="Enter the amount (in Ethers)">	
+											</div>
+											<div class="col-6">
+												<button type="submit" class="btn btn-primary">Send Transaction</button>
+											</div>
+										</div>
+										<label for="transactionStatus2">Transaction Status</label>
+										<input type="text" class="form-control" id="transactionStatus2" placeholder="Account Unlock Status" readonly>
+									</form>
 								</div>
-								<label for="unlockStatus">Transaction Status</label>
-								<input type="text" class="form-control" id="transactionStatus" placeholder="Account Unlock Status" readonly>
-							</form>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -328,17 +385,37 @@
 					<div id="checkTransaction" class="collapse" role="tabpanel" aria-labelledby="headingSeven">
 						<div class="card-block">
 							<p>If you want to check your balance, press the button below to query and return the result.</p>
-							<form id="checkTransactionForm" class="data-entry-form">
-								<div class="form-group row">
-									<div class="col-12 text-center">
-										<button type="submit" class="btn btn-primary">Check Transaction Status</button>
-									</div>
+							<div class="row">
+								<div class="col-6">
+									<h4>Node 1</h4>
+									<form id="checkTransactionForm" class="data-entry-form">
+										<div class="form-group row">
+											<div class="col-12 text-center">
+												<button type="submit" class="btn btn-primary">Check Transaction Status</button>
+											</div>
+										</div>
+										<label for="pendingTransactions">Pending Transactions</label>
+										<input type="text" class="form-control" id="pendingTransactions" placeholder="Pending Transactions" readonly>
+										<label for="queuedTransactions">Queued Transactions</label>
+										<input type="text" class="form-control" id="queuedTransactions" placeholder="Queued Transactions" readonly>
+									</form>
 								</div>
-								<label for="pendingTransactions">Pending Transactions</label>
-								<input type="text" class="form-control" id="pendingTransactions" placeholder="Pending Transactions" readonly>
-								<label for="queuedTransactions">Queued Transactions</label>
-								<input type="text" class="form-control" id="queuedTransactions" placeholder="Queued Transactions" readonly>
-							</form>
+								<div class="col-6">
+									<h4>Node 2</h4>
+									<form id="checkTransactionForm2" class="data-entry-form">
+										<div class="form-group row">
+											<div class="col-12 text-center">
+												<button type="submit" class="btn btn-primary">Check Transaction Status</button>
+											</div>
+										</div>
+										<label for="pendingTransactions2">Pending Transactions</label>
+										<input type="text" class="form-control" id="pendingTransactions2" placeholder="Pending Transactions" readonly>
+										<label for="queuedTransactions2">Queued Transactions</label>
+										<input type="text" class="form-control" id="queuedTransactions2" placeholder="Queued Transactions" readonly>
+									</form>
+								</div>
+							</div>
+							
 						</div>
 					</div>
 				</div>
