@@ -21,9 +21,8 @@
 				<div class="col-2"></div>
 				<div class="col-8 text-center">
 					<p>It looks like that you've already set up Ethereum completely or had at least initiated the process. You may choose from one of the following options below to proceed. </p>
-					<button type="button" class="btn btn-primary btn-large" style="margin-bottom: 20px;" id="startEthereumMove">Start Ethereum and Move to Step 2</button><br/>
-					<button type="button" class="btn btn-primary btn-large" style="margin-bottom: 20px;" id="moveToStep2">Move to Step 2</button><br/>
-					<button type="button" class="btn btn-primary btn-large" style="margin-bottom: 20px;" id="stopAllEthereum">Stop all Ethereum Instances</button><br/>
+					<button type="button" class="btn btn-primary btn-large" style="margin-bottom: 20px;" id="startEthereumMove">Start Ethereum and Move to Part 2</button><br/>
+					<button type="button" class="btn btn-primary btn-large" style="margin-bottom: 20px;" id="moveToStep2">Move to Part 2</button><br/>
 					<button type="button" class="btn btn-danger btn-large" id="deleteEverything">Delete Everything and start Fresh</button>
 					<p><b>Warning:</b> Doing so will delete all the Ethereum node data including your accounts and your account balances. Only do so if you are willing to lose all of it.</p>
 				</div>
@@ -40,7 +39,7 @@
 				  <div class="card">
 					<div class="card-header" role="tab" id="headingOne">
 					  <h5 class="mb-0">
-						<a data-toggle="collapse" data-parent="#accordion" href="#createAccount" aria-expanded="true" aria-controls="createAccount">1. Create a new account</a>
+						<a data-toggle="collapse" data-parent="#accordion" href="#createAccount" aria-expanded="true" aria-controls="createAccount">1. Create Ethereum accounts</a>
 					  </h5>
 					</div>
 					<div id="createAccount" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
@@ -49,20 +48,19 @@
 						<form id="createNewAccount" class="data-entry-form">
 							<div class="form-group row">
 								<div class="col-12">
-									<input type="text" class="form-control" id="passwordNode1" placeholder="Enter your Password here for Node 1">	
+									<input type="text" class="form-control" id="passwordNode1" placeholder="Enter your Password here for Node_1">	
 								</div>
 								<div class="col-12">
-									<input type="text" class="form-control" id="passwordNode2" placeholder="Enter your Password here for Node 2">	
+									<input type="text" class="form-control" id="passwordNode2" placeholder="Enter your Password here for Node_2">	
 								</div>
 								<div class="col-12 text-center">
 									<button type="submit" class="btn btn-primary">Create Accounts</button>
 								</div>
 							</div>
-							<label for="accountAddressNode1">Generated Account address for Node 1</label>
-							<input type="text" class="form-control" id="accountAddressNode1" placeholder="Your Account Addresss for Node 1" readonly>
-							<label for="accountAddressNode2">Generated Account address for Node 2</label>
-							<input type="text" class="form-control" id="accountAddressNode2" placeholder="Your Account Addresss for Node 2" readonly>
-							<p><b>Please make a note of your generated account address before moving to the next step.</b></p>
+							<label for="accountAddressNode1">Generated Account address in Node_1</label>
+							<input type="text" class="form-control" id="accountAddressNode1" placeholder="Your Account Addresss for Node_1" readonly>
+							<label for="accountAddressNode2">Generated Account address in Node_2</label>
+							<input type="text" class="form-control" id="accountAddressNode2" placeholder="Your Account Addresss for Node_2" readonly>
 						</form>
 					  </div>
 					</div>
@@ -70,7 +68,7 @@
 				  <div class="card">
 					<div class="card-header" role="tab" id="headingOne">
 					  <h5 class="mb-0">
-						<a data-toggle="collapse" data-parent="#accordion" href="#generateKeys" aria-expanded="true" aria-controls="generateKeys">2. Generate the Genesis file for the Ethereum Nodes</a>
+						<a data-toggle="collapse" data-parent="#accordion" href="#generateKeys" aria-expanded="true" aria-controls="generateKeys">2. Create the Genesis files</a>
 					  </h5>
 					</div>
 					<div id="generateKeys" class="collapse" role="tabpanel" aria-labelledby="headingOne">
@@ -79,13 +77,13 @@
 						<form id="customGenesis" class="data-entry-form">
 							<div class="form-group row">
 								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-								    <label for="genesisContent">Genesis File Contents</label>	
+								    <label for="genesisContent">Contents of the Genesis file</label>	
 									<textarea class="form-control" id="genesisContent" rows="8" readonly></textarea>
 								</div>
 							</div>
 							<div class="form-group row">
 								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-									<button type="submit" class="btn btn-primary">Generate the Genesis File</button>
+									<button type="submit" class="btn btn-primary">Create files</button>
 								</div>
 							</div>
 							<label for="genesisFileStatus">Genesis File Status</label>
@@ -97,7 +95,7 @@
 				  <div class="card">
 					<div class="card-header" role="tab" id="headingOne">
 					  <h5 class="mb-0">
-						<a data-toggle="collapse" data-parent="#accordion" href="#encrypt" aria-expanded="true" aria-controls="encrypt">3. Initialize the Ethereum Nodes</a>
+						<a data-toggle="collapse" data-parent="#accordion" href="#encrypt" aria-expanded="true" aria-controls="encrypt">3. Initialize a new Genesis Block for both the Nodes</a>
 					  </h5>
 					</div>
 					<div id="encrypt" class="collapse" role="tabpanel" aria-labelledby="headingOne">
@@ -105,9 +103,9 @@
 						<p>In this step, we will initialize the Ethereum nodes using the custom Genesis file that you created in the previous step. If you did not create a file, please complete step 2 before performing step 3.</p>
 						<form id="initializeEthereum" class="data-entry-form">
 							<div class="form-group text-center">
-								<button type="submit" class="btn btn-primary">Initialize Ethereum Nodes</button>
+								<button type="submit" class="btn btn-primary">Initialize Genesis Blocks</button>
 							</div>
-							<label for="ethereumInitStatus">Ethereum Nodes Status</label>
+							<label for="ethereumInitStatus">Genesis Block Status</label>
 							<input type="text" class="form-control" id="ethereumInitStatus" placeholder="Not initialized yet" readonly>
 						</form>
 					  </div>
@@ -136,7 +134,7 @@
 			</div>
 			<div class="row text-center" style="padding-top:10px; padding-bottom: 30px;">
 				<div class="col-12">
-					<button type="button" class="btn btn-dark btn-large" disabled id="nextStep">Move to Step 2</button>
+					<button type="button" class="btn btn-dark btn-large" disabled id="nextStep">Move to Part 2</button>
 				</div>
 			</div>
 		</div>		

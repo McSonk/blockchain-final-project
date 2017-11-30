@@ -14,17 +14,24 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-12">
-				<h1 class="title">Performing Ethereum Operations</h1>
+				<h1 class="title">Part 2: Operations on Ethereum</h1>
 			</div>
 		</div>
-		<div class="row" style="margin-top:-20px;">
+		<div class="row" style="margin-top:-20px">
+			<div class="col-2">
+			</div>
+			<div class="col-8">
+				<button type="button" class="btn btn-primary" style="margin-bottom: 20px;" id="goHome">&#8617; Return to Homepage</button>
+			</div>
+		</div>
+		<div class="row">
 			<div class="col-2">
 			</div>
 			<div class="col-5 text-center">
-				<h2>Node 1</h2>
+				<h2>Node_1</h2>
 			</div>
 			<div class="col-5 text-center">
-				<h2>Node 2</h2>
+				<h2>Node_2</h2>
 			</div>
 		</div>
 		<div class="row">
@@ -47,7 +54,7 @@
 			<div id="accordion" role="tablist" aria-multiselectable="true">
 				<div class="card">
 					<div class="card-header" role="tab" id="headingOne">
-						<h5 class="mb-0"><a data-toggle="collapse" data-parent="#accordion" href="#connectPeer" aria-expanded="true" aria-controls="connectPeer">Connect Peers</a></h5>
+						<h5 class="mb-0"><a data-toggle="collapse" data-parent="#accordion" href="#connectPeer" aria-expanded="true" aria-controls="connectPeer">Add Peer</a></h5>
 					</div>
 					<div id="connectPeer" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
 						<div class="card-block">
@@ -73,7 +80,7 @@
 							<p>If you want to check the count of connected peers, press the button below to query and return the result.</p>
 							<div class="row text-center">
 								<div class="col-6">
-									<h4>Node 1</h4>
+									<h4>Node_1</h4>
 									<form id="checkPeer" class="data-entry-form">
 										<div class="form-group row">
 											<div class="col-12">
@@ -85,7 +92,7 @@
 									</form>
 								</div>
 								<div class="col-6">
-									<h4>Node 2</h4>
+									<h4>Node_2</h4>
 									<form id="checkPeer2" class="data-entry-form">
 										<div class="form-group row">
 											<div class="col-12 text-center">
@@ -102,18 +109,18 @@
 				</div>
 				<div class="card">
 					<div class="card-header" role="tab" id="headingThree">
-						<h5 class="mb-0"><a data-toggle="collapse" data-parent="#accordion" href="#checkPeers" aria-expanded="true" aria-controls="checkPeers">Check Peers</a></h5>
+						<h5 class="mb-0"><a data-toggle="collapse" data-parent="#accordion" href="#checkPeers" aria-expanded="true" aria-controls="checkPeers">Check Peer Details</a></h5>
 					</div>
 					<div id="checkPeers" class="collapse" role="tabpanel" aria-labelledby="headingThree">
 						<div class="card-block">
 							<p>If you want to check the connected peers, press the button below to query and return the result.</p>
 							<div class="row text-center">
 								<div class="col-6">
-									<h4>Node 1</h4>
+									<h4>Node_1</h4>
 									<form id="checkPeersForm" class="data-entry-form">
 										<div class="form-group row">
 											<div class="col-12 text-center">
-												<button type="submit" class="btn btn-primary">Check Peers</button>
+												<button type="submit" class="btn btn-primary">Check Peer Details</button>
 											</div>
 										</div>
 										<label for="peerDetails">Connected Peers</label>
@@ -121,11 +128,11 @@
 									</form>
 								</div>
 								<div class="col-6">
-									<h4>Node 2</h4>
+									<h4>Node_2</h4>
 									<form id="checkPeersForm2" class="data-entry-form">
 										<div class="form-group row">
 											<div class="col-12 text-center">
-												<button type="submit" class="btn btn-primary">Check Peers</button>
+												<button type="submit" class="btn btn-primary">Check Peer Details</button>
 											</div>
 										</div>
 										<label for="peerDetails">Connected Peers</label>
@@ -146,7 +153,7 @@
 							<p><b>We are using the same password so it makes it easy to remember the password. In reality, make sure you use different passwords</b></p>
 							<div class="row text-center">
 								<div class="col-6">
-									<h4>Node 1</h4>
+									<h4>Node_1</h4>
 									<form id="accountForm" class="data-entry-form">
 										<div class="form-group row">
 											<div class="col-6">
@@ -157,11 +164,11 @@
 											</div>
 										</div>
 										<label for="createAccountStatus">Account Creation Status</label>
-										<input type="text" class="form-control" id="createAccountStatus" placeholder="Account Unlock Status" readonly>
+										<input type="text" class="form-control" id="createAccountStatus" placeholder="Account Creation Status" readonly>
 									</form>
 								</div>
 								<div class="col-6">
-									<h4>Node 2</h4>
+									<h4>Node_2</h4>
 									<form id="accountForm2" class="data-entry-form">
 										<div class="form-group row">
 											<div class="col-6">
@@ -172,7 +179,7 @@
 											</div>
 										</div>
 										<label for="createAccountStatus2">Account Creation Status</label>
-										<input type="text" class="form-control" id="createAccountStatus2" placeholder="Account Unlock Status" readonly>
+										<input type="text" class="form-control" id="createAccountStatus2" placeholder="Account Creation Status" readonly>
 									</form>
 								</div>
 							</div>
@@ -188,11 +195,12 @@
 							<p>If you want to check your balance, press the button below to query and return the result for all the accounts.</p>
 							<div class="row text-center">
 								<div class="col-6">
-									<h4>Node 1</h4>
+									<h4>Node_1</h4>
 									<form id="checkBalanceForm" class="data-entry-form">
 										<div class="form-group row">
 											<div class="col-12 text-center">
-												<button type="submit" class="btn btn-primary">Check Balance</button>
+												<button type="submit" class="btn btn-primary">Check Balance</button><br/><br/>
+												<input type="text" class="form-control" id="balanceStatus" placeholder="Status" readonly>
 											</div>
 										</div>
 										<div class="row">
@@ -215,11 +223,12 @@
 									</form>
 								</div>
 								<div class="col-6">
-									<h4>Node 2</h4>
+									<h4>Node_2</h4>
 									<form id="checkBalanceForm2" class="data-entry-form">
 										<div class="form-group row">
 											<div class="col-12 text-center">
-												<button type="submit" class="btn btn-primary">Check Balance</button>
+												<button type="submit" class="btn btn-primary">Check Balance</button><br/><br/>
+												<input type="text" class="form-control" id="balanceStatus2" placeholder="Status" readonly>
 											</div>
 										</div>
 										<div class="row">
@@ -255,7 +264,7 @@
 							<p>If you want to unlock your account, please enter the account address and the password you used to create the account and submit the form.</p>
 							<div class="row text-center">
 								<div class="col-6">
-									<h4>Node 1</h4>
+									<h4>Node_1</h4>
 									<form id="unlockAccountForm" class="data-entry-form">
 										<div class="form-group row">
 											<div class="col-6">
@@ -275,7 +284,7 @@
 									</form>
 								</div>
 								<div class="col-6">
-									<h4>Node 2</h4>
+									<h4>Node_2</h4>
 									<form id="unlockAccountForm2" class="data-entry-form">
 										<div class="form-group row">
 											<div class="col-6">
@@ -307,14 +316,14 @@
 							<p>If you want to Start or Stop a miner, use the buttons below to do so for either of the two nodes.</p>
 							<div class="row text-center">
 								<div class="col-6">
-									<h4>Node 1</h4>
+									<h4>Node_1</h4>
 									<button type="button" class="btn btn-primary btn-large" style="margin-bottom: 20px;" id="startMiner">Start Miner</button><br/>
 									<button type="button" class="btn btn-primary btn-large" style="margin-bottom: 20px;" id="stopMiner">Stop Miner</button><br/>
 									<label for="minerStatus">Miner Response</label>
 									<input type="text" class="form-control" id="minerStatus" placeholder="Miner Response" readonly>
 								</div>
 								<div class="col-6">
-									<h4>Node 2</h4>
+									<h4>Node_2</h4>
 									<button type="button" class="btn btn-primary btn-large" style="margin-bottom: 20px;" id="startMiner2">Start Miner</button><br/>
 									<button type="button" class="btn btn-primary btn-large" style="margin-bottom: 20px;" id="stopMiner2">Stop Miner</button><br/>
 									<label for="minerStatus2">Miner Response</label>
@@ -333,7 +342,7 @@
 							<p>If you want to initiate a transaction, enter the sender's account address, the receiver's account address and the amount you want to send in ethers. Please make sure you unlock the sender account at the respective node and you have sufficient funds.</p>
 							<div class="row">
 								<div class="col-6">
-									<h4>Node 1</h4>
+									<h4>Node_1</h4>
 									<form id="sendTransactionForm" class="data-entry-form">
 										<div class="form-group row">
 											<div class="col-6">
@@ -354,7 +363,7 @@
 									</form>
 								</div>
 								<div class="col-6">
-									<h4>Node 2</h4>
+									<h4>Node_2</h4>
 									<form id="sendTransactionForm2" class="data-entry-form">
 										<div class="form-group row">
 											<div class="col-6">
@@ -386,8 +395,7 @@
 						<div class="card-block">
 							<p>If you want to check the status of transactions, press the button below to query the blockchain and return the result.</p>
 							<div class="row">
-								<div class="col-6">
-									<h4>Node 1</h4>
+								<div class="col-12">
 									<form id="checkTransactionForm" class="data-entry-form">
 										<div class="form-group row">
 											<div class="col-12 text-center">
@@ -398,20 +406,6 @@
 										<input type="text" class="form-control" id="pendingTransactions" placeholder="Pending Transactions" readonly>
 										<label for="queuedTransactions">Queued Transactions</label>
 										<input type="text" class="form-control" id="queuedTransactions" placeholder="Queued Transactions" readonly>
-									</form>
-								</div>
-								<div class="col-6">
-									<h4>Node 2</h4>
-									<form id="checkTransactionForm2" class="data-entry-form">
-										<div class="form-group row">
-											<div class="col-12 text-center">
-												<button type="submit" class="btn btn-primary">Check Transaction Status</button>
-											</div>
-										</div>
-										<label for="pendingTransactions2">Pending Transactions</label>
-										<input type="text" class="form-control" id="pendingTransactions2" placeholder="Pending Transactions" readonly>
-										<label for="queuedTransactions2">Queued Transactions</label>
-										<input type="text" class="form-control" id="queuedTransactions2" placeholder="Queued Transactions" readonly>
 									</form>
 								</div>
 							</div>
@@ -435,6 +429,7 @@
 			).done(function(resp){
 				if(resp.status == "error"){
 					alert(resp.errorDetails);
+					window.location.href = "./index.html"
 				}else if(resp.status == "complete"){
 					$("#enodeAddress").val(resp.enode1);
 					$("#coinbaseAddress").val(resp.coinbase1);
@@ -443,6 +438,11 @@
 					$("#loader").fadeOut('slow');
 				}
 			});
+
+			$("#goHome").on('click', function(e){
+				e.preventDefault();
+				window.location.href = "./index.html";
+			})
 		});
 	</script>
 </body>

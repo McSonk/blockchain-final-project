@@ -5,38 +5,50 @@ const Web3 = require('web3');
 var web3 = new Web3();
 var web3Node2 = new Web3();
 const web3Admin = require('web3admin');
-const directoryNode1 = "/home/aneesh/testNodeChain";
-const directoryNode2 = "/home/aneesh/testNodeChain2";
+const directoryNode1 = "/home/aneesh/Node_1";
+const directoryNode2 = "/home/aneesh/Node_2";
 var connected = false;
 var enode1;
 var enode2;
 var coinbase1;
 var coinbase2;
+var killing = false;
 
 module.exports = {
 	checkEthereum: function(req, resp){
 		fs.readdir(directoryNode1, function(err, list){
 			if(err){
-				resp.json({"status":"complete", "message":"Instance of Ethereum not found at that location."});
-				return;
+				fs.readdir(directoryNode2, function(err,list){
+					if(err){
+						resp.json({"status":"complete", "message":"Instance of Ethereum not found at that location."});
+						return;
+					}
+					resp.json({"status":"error","errorDetails":"You have already configured Ethereum. Please choose options below."});
+					return;
+				});
+			}else{
+				resp.json({"status":"error","errorDetails":"You have already configured Ethereum. Please choose options below."});
 			}
-			resp.json({"status":"error","errorDetails":"You have already configured Ethereum. Please choose options below."});
 		});
 	},
 	deleteEverything: function(req,resp){
-		exec('rm -rf ' + directoryNode1, (err,stdout,stderr) =>{
-			if(err){
-				console.log(err)
-				resp.json({"status":"error", "errorDetails":"Unable to delete everything right now."});
-				return;
-			}
-			exec('rm -rf ' + directoryNode2, (err,stdout,stderr) =>{
+		killing = true;
+		exec('pkill geth', (err,stdout,stderr) =>{	
+			exec('rm -rf ' + directoryNode1, (err,stdout,stderr) =>{
 				if(err){
-					console.log(err)
-					resp.json({"status":"error", "errorDetails":"Unable to delete everything right now."});
+					killing = false
+					resp.json({"status":"error", "errorDetails":"Unable to delete both the directories"})
 					return;
 				}
-				resp.json({"status":"complete", "message":"Deleted everything successfully."});
+				exec('rm -rf ' + directoryNode2, (err,stdout,stderr) =>{
+					if(err){
+						killing = false
+						resp.json({"status":"error", "errorDetails":"Unable to delete both the directories"})
+						return;
+					}
+					killing = false;
+					resp.json({"status":"complete", "message":"Deleted everything successfully."});
+				});
 			});
 		});
 	},
@@ -132,13 +144,13 @@ module.exports = {
 					return;
 				}
 				exec('geth --datadir '+ directoryNode1 + ' --maxpeers 95 --networkid 13 --nodiscover --rpc --rpccorsdomain "*" --port 30301 --rpcport 8544 --rpcapi="txpool,db,eth,net,web3,personal,admin,miner"', (err, stdout, stderr) =>{
-					if(err){
+					if(err && !killing){
 						resp.json({"status":"error","errorDetails":"Unable to start Ethereum. An Instance of Ethereum is already running."});
 						return;	
 					}
 				});
 				exec('geth --datadir '+ directoryNode2 + ' --maxpeers 95 --networkid 13 --nodiscover --rpc --rpccorsdomain "*" --port 30302 --rpcport 8545 --rpcapi="txpool,db,eth,net,web3,personal,admin,miner"', (err, stdout, stderr) =>{
-					if(err){
+					if(err && !killing){
 						resp.json({"status":"error","errorDetails":"Unable to start Ethereum. An Instance of Ethereum is already running."});
 						return;	
 					}
@@ -156,7 +168,7 @@ module.exports = {
 					web3Admin.extend(web3);
 					web3Admin.extend(web3Node2);
 				}catch(e){
-					resp.json({"status":"error", "errorDetails":"Unable to connect with Ethereum node"});	
+					resp.json({"status":"error", "errorDetails":"Unable to connect to Ethereum. Please go back and start it."});	
 					return;
 				}
 				if(web3.isConnected() && web3Node2.isConnected()){
@@ -180,7 +192,7 @@ module.exports = {
 				resp.json({"status":"complete", "message":"Connected with Ethereum node", "enode1":enode1, "coinbase1":coinbase1, "enode2":enode2, "coinbase2":coinbase2});
 			}else{
 				connected = false;
-				resp.json({"status":"error", "errorDetails":"Unable to connect with Ethereum node. Please refresh this page and try again."});	
+				resp.json({"status":"error", "errorDetails":"Unable to connect to Ethereum. Please go back and start it."});	
 			}
 		}	
 	},
@@ -244,10 +256,20 @@ module.exports = {
 			var node = req.body.node;
 			var password = req.body.password;
 			if(node == 1){
+				accounts = web3.eth.accounts;
+				if(accounts.length == 5){
+					resp.json({"status":"complete", "message":"You have already created total 5 accounts on this node."});
+					return;
+				}
 				for(var i=0; i<4; i++){
 					web3.personal.newAccount(password);
 				}
 			}else if(node == 2){
+				accounts = web3Node2.eth.accounts;
+				if(accounts.length == 5){
+					resp.json({"status":"complete", "message":"You have already created total 5 accounts on this node."});
+					return;
+				}
 				for(var i=0; i<4; i++){
 					web3Node2.personal.newAccount(password);
 				}
@@ -336,15 +358,9 @@ module.exports = {
 					return;
 				}
 			}
-			resp.json({"status":"complete", "transactionStatus":"Transaction successfully submitted"});
+			resp.json({"status":"complete", "transactionStatus":"Transaction successfully submitted."});
 		}else if(type == ":transactionStatus"){
-			var node = req.body.node;
-			var status;
-			if(node == 1){
-				status = web3.txpool.status;	
-			}else if(node == 2){
-				status = web3Node2.txpool.status;
-			}
+			var status = web3.txpool.status;	
 			resp.json({"status":"complete", "pending":parseInt(status.pending,16), "queued":parseInt(status.queued,16)});
 		}
 	}
