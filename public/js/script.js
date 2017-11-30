@@ -88,21 +88,6 @@ $(document).ready(function(){
 		});
 	});
 
-	$("#stopNode").on('click', function(e){
-		e.preventDefault();
-		$.ajax({
-		    url: '/api/configureEthereum:stop', 
-		    type: 'POST', 
-		    contentType: 'application/json'}
-		).done(function(resp){
-			if(resp.status == "error"){
-				alert(resp.errorDetails);
-			}else if(resp.status == "complete"){
-				alert(resp.message);
-			}
-		});
-	});
-
 	$("#nextStep").on('click', function(e){
 		window.location.href = './ethereum.html';
 	});

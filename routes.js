@@ -144,14 +144,6 @@ module.exports = {
 					}
 				});
 			});
-		}else if(type == ":stop"){
-			exec('pkill geth', (err,stdout,stderr) => {
-				if(err){
-					resp.json({"status":"error", "errorDetails":"Unable to stop any Ethereum node."})
-					return;
-				}
-				resp.json({"status":"complete", "message":"Stopped all instances of Ethereum."})
-			});
 		}
 
 	},
