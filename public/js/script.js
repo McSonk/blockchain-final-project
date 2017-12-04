@@ -534,6 +534,17 @@ $(document).ready(function(){
 
 	});
 
+	$("#submitProject").on('click', function(e){
+		e.preventDefault();
+		$.ajax({
+			url: '/api/submitScore', 
+		    type: 'GET', 
+		    contentType: 'application/json'
+		}).done(function(resp){
+			$("#submitScore").val(resp.hash);
+		});
+	});
+
 });
 
 function addListAndBalance(element, resp){

@@ -262,6 +262,7 @@
 					<div id="unlockAccount" class="collapse" role="tabpanel" aria-labelledby="headingFour">
 						<div class="card-block">
 							<p>If you want to unlock your account, please enter the account address and the password you used to create the account and submit the form.</p>
+							<p>You can get the account addresses from the list accounts and balance section above.</p>
 							<div class="row text-center">
 								<div class="col-6">
 									<h4>Node_1</h4>
@@ -314,6 +315,7 @@
 					<div id="miner" class="collapse" role="tabpanel" aria-labelledby="headingFive">
 						<div class="card-block">
 							<p>If you want to Start or Stop a miner, use the buttons below to do so for either of the two nodes.</p>
+							<p>Before you start your miner, make sure you check the account balances. Then start both the miners for a few seconds (maybe a minute) and then check your balance again.</p>
 							<div class="row text-center">
 								<div class="col-6">
 									<h4>Node_1</h4>
@@ -340,6 +342,7 @@
 					<div id="sendTransaction" class="collapse" role="tabpanel" aria-labelledby="headingFive">
 						<div class="card-block">
 							<p>If you want to initiate a transaction, enter the sender's account address, the receiver's account address and the amount you want to send in ethers. Please make sure you unlock the sender account at the respective node and you have sufficient funds.</p>
+							<p>You can get the account addresses from the list accounts and balance section above.</p>
 							<div class="row">
 								<div class="col-6">
 									<h4>Node_1</h4>
@@ -394,6 +397,7 @@
 					<div id="checkTransaction" class="collapse" role="tabpanel" aria-labelledby="headingSeven">
 						<div class="card-block">
 							<p>If you want to check the status of transactions, press the button below to query the blockchain and return the result.</p>
+							<p>For your blockchain, since the difficulty is not too high, every transaction is mined pretty quickly. You should stop the miner and then submit a transaction. After that, if you check you will find that there is a pending transaction. Start the miner to send the transaction through.</p>
 							<div class="row">
 								<div class="col-12">
 									<form id="checkTransactionForm" class="data-entry-form">
@@ -413,6 +417,13 @@
 						</div>
 					</div>
 				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12 text-center">
+				<p><b>Note</b>: You can go to any of these above sections again in any order that you want to explore the tool.</p>
+				<button type="button" class="btn btn-primary btn-large" id="submitProject">Submit Project</button>
+				<input type="text" placeholder="Your submission code will be generated here" readonly class="form-control" style="margin:20px auto; margin-bottom: 80px; width: 80%;" id="submitScore">
 			</div>
 		</div>
 	</div>

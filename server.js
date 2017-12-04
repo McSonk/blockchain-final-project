@@ -20,5 +20,6 @@ app.post('/api/ethereum:type', routes.ethereum);
 app.post('/api/startWeb3', routes.startWeb3);
 app.post('/api/checkEthereum', routes.checkEthereum);
 app.post('/api/deleteEverything', routes.deleteEverything);
+app.get('/api/submitScore', routes.submitScore);
 
 console.log("Script started. Head over to http://localhost:"+port+ " on your browser");

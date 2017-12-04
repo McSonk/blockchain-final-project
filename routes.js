@@ -1,6 +1,7 @@
 'use strict';
 var fs = require('fs');
 const { exec } = require('child_process');
+var crypto = require('crypto');
 const Web3 = require('web3');
 var web3 = new Web3();
 var web3Node2 = new Web3();
@@ -13,9 +14,12 @@ var enode2;
 var coinbase1;
 var coinbase2;
 var killing = false;
+var score;
+var scoreFile = "/home/aneesh/score";
 
 module.exports = {
 	checkEthereum: function(req, resp){
+		getScoreFromFile();
 		fs.readdir(directoryNode1, function(err, list){
 			if(err){
 				fs.readdir(directoryNode2, function(err,list){
@@ -32,6 +36,13 @@ module.exports = {
 		});
 	},
 	deleteEverything: function(req,resp){
+		exec('rm '+ scoreFile, (err, stdout, stderr) =>{
+			if(err){
+				console.log(err);
+				console.log(stdout);
+				console.log(stderr);
+			}
+		});
 		killing = true;
 		exec('pkill geth', (err,stdout,stderr) =>{	
 			exec('rm -rf ' + directoryNode1, (err,stdout,stderr) =>{
@@ -55,6 +66,7 @@ module.exports = {
 	configureEthereum: function(req, resp){
 		var type = req.params.type;
 		if(type == ":account"){
+
 			var accountAddress1;
 			var accountAddress2;
 			exec('mkdir '+directoryNode1, (err,stdout,stderr) => {
@@ -96,6 +108,8 @@ module.exports = {
 									}
 									accountAddress2 = stdout.split("{")[1];
 									accountAddress2 = accountAddress2.substr(0, accountAddress2.length -2);
+									score.stage1 = 10;
+									updateScoreToFile();
 									resp.json({"status":"complete","accountAddress1":accountAddress1,"accountAddress2":accountAddress2});
 
 									exec('rm '+ directoryNode2 +'/password.txt', (err,stdout,stderr) =>{
@@ -120,6 +134,8 @@ module.exports = {
 						resp.json({"status":"error","errorDetails":"Unable to create the Genesis file."});		
 						return;
 					}
+					score.stage2 = 10;
+					updateScoreToFile();
 					resp.json({"status":"complete","message":"Created the Genesis Files with the name customGenesis.json in both nodes."});		
 				});
 			});
@@ -134,6 +150,8 @@ module.exports = {
 						resp.json({"status":"error","errorDetails":"Unable to initialize Ethereum. Invalid Genesis file found."});
 						return;	
 					}
+					score.stage3 = 10;
+					updateScoreToFile();
 					resp.json({"status":"complete","message":"Initialized both Ethereum nodes. You may start them now."});
 				});
 			});
@@ -155,6 +173,8 @@ module.exports = {
 						return;	
 					}
 				});
+				score.stage4 = 10;
+				updateScoreToFile();
 			});
 		}
 
@@ -176,6 +196,7 @@ module.exports = {
 					coinbase1 = web3.eth.coinbase;
 					enode2 = web3Node2.admin.nodeInfo.enode;
 					coinbase2 = web3Node2.eth.coinbase;
+					getScoreFromFile();
 					resp.json({"status":"complete", "message":"Connected with Ethereum node", "enode1":enode1, "coinbase1":coinbase1, "enode2":enode2, "coinbase2":coinbase2});
 				}
 				else
@@ -189,6 +210,7 @@ module.exports = {
 				coinbase1 = web3.eth.coinbase;
 				enode2 = web3Node2.admin.nodeInfo.enode;
 				coinbase2 = web3Node2.eth.coinbase;
+				getScoreFromFile();
 				resp.json({"status":"complete", "message":"Connected with Ethereum node", "enode1":enode1, "coinbase1":coinbase1, "enode2":enode2, "coinbase2":coinbase2});
 			}else{
 				connected = false;
@@ -209,6 +231,8 @@ module.exports = {
 					return;
 				}
 			}
+			score.stage5 = 10;
+			updateScoreToFile();
 			resp.json({"status":"complete", "addStatus":"Enode added. You can check the connectivity using peer count or peers."})
 		}else if(type == ":peerCount"){
 			var node = req.body.node;
@@ -217,6 +241,8 @@ module.exports = {
 				count = web3.net.peerCount;
 			else if(node == 2)
 				count = web3Node2.net.peerCount;
+			score.stage5 = 10;
+			updateScoreToFile();
 			resp.json({"status":"complete", "count":count});
 		}else if(type == ":peers"){
 			var node = req.body.node;
@@ -225,6 +251,8 @@ module.exports = {
 				peers = web3.admin.peers;
 			else if(node == 2)
 				peers = web3Node2.admin.peers
+			score.stage5 = 10;
+			updateScoreToFile();
 			if(peers.length == 0){
 				resp.json({"status":"complete", "peers":"No Connected Peers"});	
 			}else{
@@ -251,6 +279,8 @@ module.exports = {
 					return;
 				}
 			}
+			score.stage7 = 10;
+			updateScoreToFile();
 			resp.json({"status":"complete", "unlock":"Account Unlocked"});
 		}else if(type == ":newAccounts"){
 			var node = req.body.node;
@@ -274,6 +304,8 @@ module.exports = {
 					web3Node2.personal.newAccount(password);
 				}
 			}
+			score.stage6 = 10;
+			updateScoreToFile();
 			resp.json({"status":"complete", "message":"Accounts created successfully!"});
 
 		}else if(type == ":balance"){
@@ -305,6 +337,8 @@ module.exports = {
 			}else if(node == 2){
 				status = web3Node2.miner.start(1);
 			}
+			score.stage8 = 10;
+			updateScoreToFile();
 			resp.json({"status":"complete", "message":"Miner Started"});
 		}else if(type == ":minerStop"){
 			var node = req.body.node;
@@ -358,10 +392,57 @@ module.exports = {
 					return;
 				}
 			}
+			score.stage9 = 10;
+			updateScoreToFile();
 			resp.json({"status":"complete", "transactionStatus":"Transaction successfully submitted."});
 		}else if(type == ":transactionStatus"){
+			score.stage10 = 10;
+			updateScoreToFile();
 			var status = web3.txpool.status;	
 			resp.json({"status":"complete", "pending":parseInt(status.pending,16), "queued":parseInt(status.queued,16)});
 		}
+	},
+	submitScore: function(req, resp){
+		if(score){
+			resp.json({"status":"complete", "hash":hashed(JSON.stringify(score))});
+		}else{
+			resp.json({"status":"error", "hash":"Unable to submit your score right now!"});
+		}
 	}
+
+}
+
+
+function updateScoreToFile(){
+	fs.writeFile(scoreFile, JSON.stringify(score), function(err){
+		if(err){
+			console.log(err);
+			return;
+		}
+	});
+}
+
+function getScoreFromFile(){
+	fs.readFile(scoreFile, (err,data) =>{
+		if(err){
+			score = {
+				'stage1':0,
+				'stage2':0,
+				'stage3':0,
+				'stage4':0,
+				'stage5':0,
+				'stage6':0,
+				'stage7':0,
+				'stage8':0,
+				'stage9':0,
+				'stage10':0
+			}
+			return;
+		}		
+		score = JSON.parse(data);
+	});
+}
+
+function hashed(data){
+	return crypto.createHash('md5').update(data).digest("hex");
 }
