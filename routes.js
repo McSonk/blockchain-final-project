@@ -404,7 +404,12 @@ module.exports = {
 	},
 	submitScore: function(req, resp){
 		if(score){
-			resp.json({"status":"complete", "hash":hashed(JSON.stringify(score))});
+			var count = -1;
+			for(var x in score){
+				if(score[x] == 10)
+					count++;
+			}
+			resp.json({"status":"complete", "hash":count.toString()+hashed(JSON.stringify(score))});
 		}else{
 			resp.json({"status":"error", "hash":"Unable to submit your score right now!"});
 		}

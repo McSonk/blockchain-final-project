@@ -545,6 +545,19 @@ $(document).ready(function(){
 		});
 	});
 
+	$("#copyScore").on('click', function(e){
+		e.preventDefault();
+		var copy = document.getElementById("submitScore");
+		if(!copy.value){
+			alert("Please generate your score first!");
+			return;
+		}
+		copy.select();
+		document.execCommand("Copy");
+		copy.selectionStart = copy.selectionEnd = -1;
+		alert("Copied to Clipboard")
+	});
+
 });
 
 function addListAndBalance(element, resp){
