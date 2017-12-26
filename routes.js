@@ -81,7 +81,7 @@ module.exports = {
 					}
 					exec('geth account new --password ' + directoryNode1 + '/password.txt --datadir '+ directoryNode1 , (err,stdout,stderr) =>{
 						if(err){
-							resp.json({"status":"error","accountAddress":"Error Creating your Account right now"});
+							resp.json({"status":"error","errorDetails":"Error Creating your Account right now"});
 							return;
 						}
 						accountAddress1 = stdout.split("{")[1];
@@ -103,7 +103,7 @@ module.exports = {
 								}
 								exec('geth account new --password ' + directoryNode2 + '/password.txt --datadir '+ directoryNode2 , (err,stdout,stderr) =>{
 									if(err){
-										resp.json({"status":"error","accountAddress":"Error Creating your Account right now"});
+										resp.json({"status":"error","errorDetails":"Error Creating your Account right now"});
 										return;
 									}
 									accountAddress2 = stdout.split("{")[1];
@@ -287,27 +287,91 @@ module.exports = {
 			var password = req.body.password;
 			if(node == 1){
 				accounts = web3.eth.accounts;
-				if(accounts.length == 5){
+				if(accounts.length >= 5){
 					resp.json({"status":"complete", "message":"You have already created total 5 accounts on this node."});
 					return;
 				}
-				for(var i=0; i<4; i++){
-					web3.personal.newAccount(password);
-				}
+				// for(var k=0; k<4; k++){
+				// 	web3.personal.newAccount(password);
+				// 	console.log("Node 1 account created");
+				// }
+				fs.writeFile(directoryNode1 + "/password.txt", password, function(err){
+					if(err){
+						resp.json({"status":"error","errorDetails":"Unable to create a new account right now!"});		
+						return;
+					}
+					exec('geth account new --password ' + directoryNode1 + '/password.txt --datadir '+ directoryNode1 , (err,stdout,stderr) =>{
+						if(err){
+							resp.json({"status":"error","errorDetails":"Error Creating your Account right now"});
+							return;
+						}
+						exec('geth account new --password ' + directoryNode1 + '/password.txt --datadir '+ directoryNode1 , (err,stdout,stderr) =>{
+						if(err){
+							resp.json({"status":"error","errorDetails":"Error Creating your Account right now"});
+							return;
+							}
+							exec('geth account new --password ' + directoryNode1 + '/password.txt --datadir '+ directoryNode1 , (err,stdout,stderr) =>{
+								if(err){
+									resp.json({"status":"error","errorDetails":"Error Creating your Account right now"});
+									return;
+								}
+								exec('geth account new --password ' + directoryNode1 + '/password.txt --datadir '+ directoryNode1 , (err,stdout,stderr) =>{
+									if(err){
+										resp.json({"status":"error","errorDetails":"Error Creating your Account right now"});
+										return;
+									}
+									score.stage6 = 10;
+									updateScoreToFile();
+									resp.json({"status":"complete", "message":"Accounts created successfully!"});
+								});
+							});
+						});
+					});
+				});
 			}else if(node == 2){
 				accounts = web3Node2.eth.accounts;
-				if(accounts.length == 5){
+				if(accounts.length >= 5){
 					resp.json({"status":"complete", "message":"You have already created total 5 accounts on this node."});
 					return;
 				}
-				for(var i=0; i<4; i++){
-					web3Node2.personal.newAccount(password);
-				}
+				// for(var j=0; j<4; j++){
+				// 	web3Node2.personal.newAccount(password);
+				// 	console.log("Node 2 account created");
+				// }
+				fs.writeFile(directoryNode2 + "/password.txt", password, function(err){
+					if(err){
+						resp.json({"status":"error","errorDetails":"Unable to create a new account right now!"});		
+						return;
+					}
+					exec('geth account new --password ' + directoryNode2 + '/password.txt --datadir '+ directoryNode2 , (err,stdout,stderr) =>{
+						if(err){
+							resp.json({"status":"error","errorDetails":"Error Creating your Account right now"});
+							return;
+						}
+						exec('geth account new --password ' + directoryNode2 + '/password.txt --datadir '+ directoryNode2 , (err,stdout,stderr) =>{
+						if(err){
+							resp.json({"status":"error","errorDetails":"Error Creating your Account right now"});
+							return;
+							}
+							exec('geth account new --password ' + directoryNode2 + '/password.txt --datadir '+ directoryNode2 , (err,stdout,stderr) =>{
+								if(err){
+									resp.json({"status":"error","errorDetails":"Error Creating your Account right now"});
+									return;
+								}
+								exec('geth account new --password ' + directoryNode2 + '/password.txt --datadir '+ directoryNode2 , (err,stdout,stderr) =>{
+									if(err){
+										resp.json({"status":"error","errorDetails":"Error Creating your Account right now"});
+										return;
+									}
+									score.stage6 = 10;
+									updateScoreToFile();
+									resp.json({"status":"complete", "message":"Accounts created successfully!"});
+								});
+							});
+						});
+					});
+				});
 			}
-			score.stage6 = 10;
-			updateScoreToFile();
-			resp.json({"status":"complete", "message":"Accounts created successfully!"});
-
 		}else if(type == ":balance"){
 			var node = req.body.node;
 			var balanceWei = [];
