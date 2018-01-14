@@ -750,7 +750,7 @@ function showLongModal(){
 		backdrop: 'static',
 		keyboard: false
 	});
-	var countDown = new Date().getTime() + (5 * 60 * 1000);
+	var countDown = new Date().getTime() + (10 * 60 * 1000);
 	var longInterval = setInterval(function(){
 		var now = new Date().getTime();
 		var remain = countDown - now;
