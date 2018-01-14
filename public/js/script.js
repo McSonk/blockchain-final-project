@@ -763,6 +763,7 @@ function showLongModal(){
 		if(remain<0){
 			clearInterval(longInterval);
 			clearInterval(DAGInterval);
+			hideLongModal();
 			document.getElementById("longTimer").innerHTML = "5m 0s";
 		}
 
