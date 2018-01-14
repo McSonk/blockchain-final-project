@@ -16,6 +16,7 @@ var coinbase2;
 var killing = false;
 var score;
 var scoreFile = "/home/aneesh/score";
+var ethhashFolder = "/home/aneesh/.ethash2";
 
 module.exports = {
 	checkEthereum: function(req, resp){
@@ -48,17 +49,23 @@ module.exports = {
 			exec('rm -rf ' + directoryNode1, (err,stdout,stderr) =>{
 				if(err){
 					killing = false
-					resp.json({"status":"error", "errorDetails":"Unable to delete both the directories"})
+					resp.json({"status":"error", "errorDetails":"Unable to delete both the directories"});
 					return;
 				}
 				exec('rm -rf ' + directoryNode2, (err,stdout,stderr) =>{
 					if(err){
 						killing = false
-						resp.json({"status":"error", "errorDetails":"Unable to delete both the directories"})
+						resp.json({"status":"error", "errorDetails":"Unable to delete both the directories"});
 						return;
 					}
 					killing = false;
-					resp.json({"status":"complete", "message":"Deleted everything successfully."});
+					exec('rm -rf '+ ethhashFolder, (err,stdout, stderr) => {
+						if(err){
+							resp.json({"status":"error", "errorDetails":"Unable to delete the ethhash"});
+							return;
+						}
+						resp.json({"status":"complete", "message":"Deleted everything successfully."});
+					});
 				});
 			});
 		});
@@ -161,18 +168,8 @@ module.exports = {
 					resp.json({"status":"error", "errorDetails":"Ethereum has not been configured right now."});
 					return;
 				}
-				exec('geth --datadir '+ directoryNode1 + ' --maxpeers 95 --networkid 13 --nodiscover --rpc --rpccorsdomain "*" --port 30301 --rpcport 8544 --rpcapi="txpool,db,eth,net,web3,personal,admin,miner"', (err, stdout, stderr) =>{
-					if(err && !killing){
-						resp.json({"status":"error","errorDetails":"Unable to start Ethereum. An Instance of Ethereum is already running."});
-						return;	
-					}
-				});
-				exec('geth --datadir '+ directoryNode2 + ' --maxpeers 95 --networkid 13 --nodiscover --rpc --rpccorsdomain "*" --port 30302 --rpcport 8545 --rpcapi="txpool,db,eth,net,web3,personal,admin,miner"', (err, stdout, stderr) =>{
-					if(err && !killing){
-						resp.json({"status":"error","errorDetails":"Unable to start Ethereum. An Instance of Ethereum is already running."});
-						return;	
-					}
-				});
+				exec('geth --datadir '+ directoryNode1 + ' --maxpeers 95 --networkid 13 --nodiscover --rpc --rpccorsdomain "*" --port 30301 --rpcport 8544 --rpcapi="txpool,db,eth,net,web3,personal,admin,miner"', (err, stdout, stderr) =>{});
+				exec('geth --datadir '+ directoryNode2 + ' --maxpeers 95 --networkid 13 --nodiscover --rpc --rpccorsdomain "*" --port 30302 --rpcport 8545 --rpcapi="txpool,db,eth,net,web3,personal,admin,miner"', (err, stdout, stderr) =>{});
 				score.stage4 = 10;
 				updateScoreToFile();
 			});
@@ -476,6 +473,14 @@ module.exports = {
 			resp.json({"status":"complete", "hash":count.toString()+hashed(JSON.stringify(score))});
 		}else{
 			resp.json({"status":"error", "hash":"Unable to submit your score right now!"});
+		}
+	},
+	checkDAG: function(req, resp){
+		var number = web3.eth.blockNumber;
+		if(number>0){
+			resp.json({"status":"complete", "dagStatus":true});
+		}else{
+			resp.json({"status":"complete", "dagStatus":false});
 		}
 	}
 

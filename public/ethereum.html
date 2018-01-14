@@ -315,22 +315,22 @@
 					<div id="miner" class="collapse" role="tabpanel" aria-labelledby="headingFive">
 						<div class="card-block">
 							<p>If you want to Start or Stop a miner, use the buttons below to do so for either of the two nodes.</p>
-							<p>Before you start your miner, make sure you check the account balances. Then start both the miners for a few seconds (maybe a minute) and then check your balance again.</p>
+							<p>Before you start your miner, make sure you check the account balances. Then start the miner and wait for the timer. Then check your balance again.</p>
 							<div class="row text-center">
-								<div class="col-6">
-									<h4>Node_1</h4>
+								<div class="col-12">
+<!-- 									<h4>Node_1</h4> -->
 									<button type="button" class="btn btn-primary btn-large" style="margin-bottom: 20px;" id="startMiner">Start Miner</button><br/>
 									<button type="button" class="btn btn-primary btn-large" style="margin-bottom: 20px;" id="stopMiner">Stop Miner</button><br/>
 									<label for="minerStatus">Miner Response</label>
 									<input type="text" class="form-control" id="minerStatus" placeholder="Miner Response" readonly>
 								</div>
-								<div class="col-6">
+								<!-- <div class="col-6">
 									<h4>Node_2</h4>
 									<button type="button" class="btn btn-primary btn-large" style="margin-bottom: 20px;" id="startMiner2">Start Miner</button><br/>
 									<button type="button" class="btn btn-primary btn-large" style="margin-bottom: 20px;" id="stopMiner2">Stop Miner</button><br/>
 									<label for="minerStatus2">Miner Response</label>
 									<input type="text" class="form-control" id="minerStatus2" placeholder="Miner Response" readonly>
-								</div>
+								</div> -->
 							</div>
 						</div>
 					</div>
@@ -425,6 +425,30 @@
 				<button type="button" class="btn btn-primary btn-large" id="submitProject">Submit Project</button>
 				<input type="text" placeholder="Your submission token will be generated here." readonly class="form-control" style="margin:20px auto; width: 80%;" id="submitScore">
 				<button type="button" class="btn btn-primary btn-large" id="copyScore" style=" margin-bottom: 80px; ">Copy Token to Clipboard</button>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="shortModal">
+		<div class="modal-dialog modal-sm" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Please Wait...</h5>
+				</div>
+				<div class="modal-body">
+					<p>Waiting <span id="shortTimer">0m 5s</span> for the action to complete before resuming operations.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="longModal">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Waiting for DAGs to be generated...</h5>
+				</div>
+				<div class="modal-body">
+					<p>Checking if DAGs have been generated or not. If they have not been generated, please wait <span id="longTimer" style="font-weight: bold;">5m 0s</span> for them to be generated</p>
+				</div>
 			</div>
 		</div>
 	</div>
