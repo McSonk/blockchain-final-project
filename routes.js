@@ -263,14 +263,14 @@ module.exports = {
 			var result;
 			if(node == 1){
 				try{
-					result = web3.personal.unlockAccount(account, password);
+					result = web3.personal.unlockAccount(account, password,36000);
 				}catch(e){
 					resp.json({"status":"complete", "unlock":"Incorrect Details Entered"});
 					return;
 				}
 			}else if(node == 2){
 				try{
-					result = web3Node2.personal.unlockAccount(account, password);
+					result = web3Node2.personal.unlockAccount(account, password,36000);
 				}catch(e){
 					resp.json({"status":"complete", "unlock":"Incorrect Details Entered"});
 					return;
