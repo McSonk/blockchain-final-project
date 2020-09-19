@@ -6,8 +6,8 @@ const Web3 = require('web3');
 var web3 = new Web3();
 var web3Node2 = new Web3();
 const web3Admin = require('web3admin');
-const directoryNode1 = "/home/aneesh/Node_1";
-const directoryNode2 = "/home/aneesh/Node_2";
+const directoryNode1 = "/home/ubuntu/Node_1";
+const directoryNode2 = "/home/ubuntu/Node_2";
 var connected = false;
 var enode1;
 var enode2;
@@ -15,8 +15,8 @@ var coinbase1;
 var coinbase2;
 var killing = false;
 var score;
-var scoreFile = "/home/aneesh/score";
-var ethhashFolder = "/home/aneesh/.ethash2";
+var scoreFile = "/home/ubuntu/score";
+var ethhashFolder = "/home/ubuntu/.ethash";
 
 module.exports = {
 	checkEthereum: function(req, resp){
